@@ -1,0 +1,10 @@
+<div class="header">
+  <h1>HIMAIK Finance</h1>
+  <button mat-icon-button aria-label="Tombol ikon profil pengguna" (click)="onButtonClick()">
+    @if (isLoggedIn) {
+      <mat-icon>exit_to_app</mat-icon>
+    } @else {
+      <mat-icon>person_pin</mat-icon>
+    }
+  </button>
+</div>

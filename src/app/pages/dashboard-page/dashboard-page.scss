@@ -1,0 +1,92 @@
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  height: 90vh;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex: 1;
+}
+
+.dashboard-container {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.balance-container {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 6em;
+}
+
+.button-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: end;
+
+  mat-icon {
+    cursor: pointer;
+  }
+}
+
+.table-container {
+  background-color: var(--secondary-background-color);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-around;
+  width: auto;
+  margin-top: 1rem;
+  padding: 1rem;
+  height: 50vh;
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-header-cell,
+::ng-deep .mat-mdc-table .mat-mdc-cell {
+  color: #fff0c6 !important;
+}
+
+@media (max-width: 768px) {
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-container {
+    border-radius: 12px;
+    background-color: var(--secondary-background-color);
+    height: 52vh;
+
+    @media (max-height: 740px) {
+      height: 63vh;
+    }
+
+    @media (max-height: 670px) {
+      height: 70vh;
+    }
+  }
+
+  .button-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+    justify-content: space-between;
+
+    .mButton{
+      width: 50%;
+    }
+  }
+}

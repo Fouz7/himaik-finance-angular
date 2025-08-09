@@ -1,0 +1,25 @@
+main {
+  display: flex;
+}
+
+#cards-container, #table-container {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.list-container {
+  animation: slideInFromRight 0.5s ease-out forwards;
+}
+
+

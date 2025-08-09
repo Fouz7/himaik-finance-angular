@@ -1,0 +1,24 @@
+.nominal{
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: -0.2em;
+}
+
+.pText{
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.nCard{
+  text-align: center;
+}
+
+.card-income .nominal,
+.card-income .pText {
+  color: var(--income-color);
+}
+
+.card-outcome .nominal,
+.card-outcome .pText {
+  color: var(--outcome-color);
+}

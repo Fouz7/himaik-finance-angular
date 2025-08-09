@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-card {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  padding: 1rem;
+  animation: popupIn 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.login-card-title {
+  text-align: center;
+  margin: 0 2rem 1rem 2rem;
+}
+
+.login-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.login-card-body input {
+  border: none;
+  border-bottom: 1.5px solid var(--text-color);
+  background-color: transparent;
+  color: var(--text-color);
+  padding: 0.5rem;
+}
+
+.login-card-body input::placeholder {
+  color: var(--text-color);
+}
+
+.login-card-body input:focus {
+  outline: none;
+}
+
+.login-card-footer {
+  display: flex;
+  flex-direction: column;
+  padding: 0.9rem;
+}
+
+.login-card-button {
+  background-color: var(--secondary-background-color);
+  border: none;
+  border-radius: 6px;
+  color: var(--background-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 36px;
+}
+
+.login-card-divider {
+  background-color: var(--text-color);
+  height: 1px;
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
+.login-card-text a {
+  color: var(--text-color);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+:host ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--background-color);
+}

@@ -1,0 +1,63 @@
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.card {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  height: 24vh;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  animation: slideInFromLeft 0.5s ease-out;
+}
+
+.card-body {
+  font-weight: 900;
+  margin-right: 2%;
+  text-align: end;
+}
+
+.card-body-text{
+  font-size: 3rem;
+}
+
+.card-title-text {
+  font-size: large;
+  font-weight: bold;
+}
+
+.card-income .card-body,
+.card-income .card-title-text {
+  color: var(--income-color);
+}
+
+.card-outcome .card-body,
+.card-outcome .card-title-text {
+  color: var(--outcome-color);
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: auto;
+    padding: 0.2rem 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .card-body-text {
+    font-size: 1.5rem;
+  }
+
+  .card-title-text {
+    font-size: medium;
+  }
+}

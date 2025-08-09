@@ -1,0 +1,38 @@
+<div class="container">
+  <form class="login-card" (ngSubmit)="onLogin()">
+    <div class="login-card-header">
+      <h2 class="login-card-title">Go To Dashboard</h2>
+    </div>
+    <div class="login-card-body">
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="login-card-input"
+        placeholder="Username"
+        [(ngModel)]="credentials.username"
+        required
+      >
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="login-card-input"
+        placeholder="Password"
+        [(ngModel)]="credentials.password"
+        required
+      >
+    </div>
+    <div class="login-card-footer">
+      <button type="submit" id="login-button" class="login-card-button" [disabled]="isLoading">
+        @if (isLoading) {
+          <mat-progress-spinner [diameter]="24" mode="indeterminate"></mat-progress-spinner>
+        } @else {
+          <span>Login</span>
+        }
+      </button>
+      <div class="login-card-divider"></div>
+      <p class="login-card-text">Not an admin? <a (click)="goBack()" style="cursor: pointer;">GO BACK PLEASE</a></p>
+    </div>
+  </form>
+</div>

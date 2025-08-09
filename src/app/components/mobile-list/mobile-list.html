@@ -1,0 +1,52 @@
+@if (incomes && outcomes) {
+  <div class="mobile-list-container">
+    <mat-tab-group animationDuration="1200ms">
+      <mat-tab label="Income">
+        <div class="pagination-controls">
+          <button (click)="navigate('income', 'prev')" [disabled]="incomePage <= 1 || loadingIncome">
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <button (click)="navigate('income', 'next')" [disabled]="!incomeHasMore || loadingIncome">
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+        </div>
+        <div class="list-viewport">
+          @for (item of incomes; track item) {
+            <div class="list-item">
+              <div class="item-details">
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-date">{{ item.transfer_date | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="item-amount income">
+                {{ item.nominal | currency:'Rp ':'symbol':'1.0-0' }}
+              </div>
+            </div>
+          }
+        </div>
+      </mat-tab>
+      <mat-tab label="Transaction">
+        <div class="pagination-controls">
+          <button (click)="navigate('outcome', 'prev')" [disabled]="outcomePage <= 1 || loadingOutcome">
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <button (click)="navigate('outcome', 'next')" [disabled]="!outcomeHasMore || loadingOutcome">
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+        </div>
+        <div class="list-viewport">
+          @for (item of outcomes; track item) {
+            <div class="list-item">
+              <div class="item-details">
+                <span class="item-name">{{ item.notes }}</span>
+                <span class="item-date">{{ item.createdAt | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="item-amount" [ngClass]="getTransactionClass(item)">
+                {{ getTransactionAmount(item) | currency:'Rp ':'symbol':'1.0-0' }}
+              </div>
+            </div>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+}

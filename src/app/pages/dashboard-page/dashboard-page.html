@@ -1,0 +1,76 @@
+<app-header [isLoggedIn]="(isLoggedIn$ | async)" (buttonClick)="onLogout()"/>
+<main>
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  } @else {
+    @if (isMobile()) {
+      <div class="mobile-view">
+        <div class="button-container">
+          <button class="mButton" matFab extended type="button" (click)="openDialog('income')">
+            Add Income
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
+          <button class="mButton" matFab extended type="button" (click)="openDialog('transaction')">
+            Add Outcome
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+        <div class="cards-container-mobile">
+          <app-card
+            [cardTitle]="'Total Balance'"
+            [cardBody]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
+          />
+          <app-card
+            [cardType]="'card-income'"
+            [cardTitle]="'Total Income'"
+            [cardBody]="totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+          />
+          <app-card
+            [cardType]="'card-outcome'"
+            [cardTitle]="'Total Outcome'"
+            [cardBody]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+          />
+        </div>
+        <div class="list-container">
+          <app-mobile-list/>
+        </div>
+      </div>
+    } @else {
+      <div class="dashboard-container">
+        <div class="balance-container">
+          <app-balance
+            [title]="'Total Balance'"
+            [nominal]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
+          />
+          <app-balance
+            [type]="'card-income'"
+            [title]="'Total Income'"
+            [nominal]="totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+          />
+          <app-balance
+            [type]="'card-outcome'"
+            [title]="'Total Outcome'"
+            [nominal]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+          />
+        </div>
+        <div class="button-container">
+          <mat-icon (click)="openDialog('income')">add_circle_outline</mat-icon>
+          <mat-icon (click)="openDialog('transaction')">remove_circle_outline</mat-icon>
+        </div>
+        <div class="table-container">
+          <app-income-table/>
+          <app-outcome-table/>
+        </div>
+      </div>
+    }
+  }
+</main>
+@if (showDialog) {
+  <app-input-dialog
+    [data]="{ type: dialogType }"
+    (closed)="onDialogClose()"
+    (submitted)="onDialogSubmit($event)">
+  </app-input-dialog>
+}

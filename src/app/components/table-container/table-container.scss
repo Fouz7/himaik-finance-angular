@@ -1,0 +1,27 @@
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.table {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  height: calc((24vh + 1rem) * 3);
+  padding: 1rem;
+  margin: 1rem 0;
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+.mat-mdc-table  {
+  background: transparent;
+}
+
+.mat-mdc-paginator {
+  background-color: transparent;
+}

@@ -1,0 +1,58 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$cyan-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}/* You can add global styles to this file, and also import other style files */
+
+:root {
+  @include mat.form-field-overrides((
+    filled-input-text-color: var(--text-color),
+  ));
+}
+
+:root {
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: var(--primary),
+  ));
+}
+
+:root {
+  @include mat.dialog-overrides((
+    container-color: var(--primary),
+  ));
+}
+
+:root {
+  @include mat.tabs-overrides((
+    active-focus-indicator-color: var(--secondary-background-color),
+    active-focus-label-text-color: var(--primary),
+    divider-color: var(--secondary-background-color),
+  ));
+}
+
+:root {
+  --primary: #F1E2B8;
+  --background-color: #F1E2B8;
+  --secondary-background-color: #765E41;
+  --text-color: #421010;
+  --income-color: #267A0A;
+  --outcome-color: #A42222;
+}
+
+.mat-mdc-table {
+  background: transparent;
+}
+
+html, body { height: 90vh; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #9C8F7C; }

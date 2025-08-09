@@ -1,0 +1,30 @@
+.custom-paginator {
+  display: flex;
+  color: #f0e0cb;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  mat-icon {
+    cursor: pointer;
+  }
+  mat-icon.disabled {
+    color: var(--secondary-background-color);
+    pointer-events: none;
+  }
+}
+
+.mat-mdc-table  {
+  background: transparent;
+}
+
+.table-wrapper{
+  text-align: center;
+}
+
+.page-info {
+  background: var(--background-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  color: var(--secondary-background-color);
+}

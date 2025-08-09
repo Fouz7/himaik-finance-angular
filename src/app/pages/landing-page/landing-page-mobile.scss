@@ -1,0 +1,21 @@
+@media (max-width: 768px){
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .list-container {
+    border-radius: 12px;
+    background-color: var(--secondary-background-color);
+    margin: 2%;
+    height: 52vh;
+
+    @media (max-height: 740px) {
+      height: 63vh;
+    }
+
+    @media (max-height: 670px) {
+      height: 70vh;
+    }
+  }
+}
