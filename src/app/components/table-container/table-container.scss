@@ -25,3 +25,12 @@
 .mat-mdc-paginator {
   background-color: transparent;
 }
+
+.mat-mdc-header-row, .mat-mdc-row {
+  height: 40px; /* Sesuaikan nilai ini sesuai kebutuhan Anda */
+}
+
+.mat-mdc-cell {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}

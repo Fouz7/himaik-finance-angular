@@ -33,14 +33,15 @@ html {
   ));
 }
 
-:root {
-  @include mat.tabs-overrides((
-    active-focus-indicator-color: var(--secondary-background-color),
-    active-focus-label-text-color: var(--primary),
-    divider-color: var(--secondary-background-color),
-  ));
+@media (max-width: 768px) {
+  :root {
+    @include mat.tabs-overrides((
+      active-focus-indicator-color: var(--secondary-background-color),
+      active-focus-label-text-color: var(--primary),
+      divider-color: var(--secondary-background-color),
+    ));
+  }
 }
-
 :root {
   @include mat.fab-overrides((
     container-color: var(--background-color),
