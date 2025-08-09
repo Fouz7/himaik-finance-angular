@@ -42,6 +42,12 @@ html {
 }
 
 :root {
+  @include mat.fab-overrides((
+    container-color: var(--background-color),
+  ));
+}
+
+:root {
   --primary: #F1E2B8;
   --background-color: #F1E2B8;
   --secondary-background-color: #765E41;
