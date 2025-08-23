@@ -1,4 +1,4 @@
-import {Component, inject, WritableSignal, signal, Signal} from '@angular/core';
+import {Component, inject, WritableSignal, signal, Signal, OnInit, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthServices} from '../../services/auth-services';
 import {IncomeService} from '../../services/income-service';
@@ -43,7 +43,7 @@ import {ConfirmationDialog} from '../../components/confirmation-dialog/confirmat
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss'
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit, OnDestroy {
   private authService = inject(AuthServices);
   private balanceService = inject(BalanceService);
   private dialog = inject(MatDialog);
@@ -51,6 +51,12 @@ export class DashboardPage {
   private transactionService = inject(TransactionService);
   private snackBar = inject(MatSnackBar);
   private breakpointObserver = inject(BreakpointObserver);
+  private mql?: MediaQueryList;
+  private _isLandscape = false;
+
+  private readonly onMqlChange = (e: MediaQueryListEvent) => {
+    this._isLandscape = e.matches;
+  };
 
   showDialog = false;
   dialogType: 'income' | 'transaction' = 'income';
@@ -61,12 +67,6 @@ export class DashboardPage {
   totalIncome: WritableSignal<any | undefined> = signal(undefined);
   totalOutcome: WritableSignal<any | undefined> = signal(undefined);
   balanceEvidence: Signal<any | undefined> = toSignal(this.balanceService.showBalanceEvidence());
-
-  isMobile = toSignal(
-    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(map(result => result.matches)),
-    {initialValue: false}
-  );
 
   constructor() {
     forkJoin({
@@ -85,6 +85,27 @@ export class DashboardPage {
         this.isLoading.set(false);
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.mql = window.matchMedia('(orientation: landscape)');
+    this._isLandscape = this.mql.matches;
+
+    if (this.mql.addEventListener) {
+      this.mql.addEventListener('change', this.onMqlChange);
+    } else {
+      (this.mql as any).addListener(this.onMqlChange);
+    }
+  }
+
+  isMobile = toSignal(
+    this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(map(result => result.matches)),
+    {initialValue: false}
+  );
+
+  isLandscape(): boolean {
+    return this._isLandscape;
   }
 
   onLogout() {
@@ -156,5 +177,14 @@ export class DashboardPage {
 
   openUploadEvidenceDialog(): void {
     this.updateEvidence();
+  }
+
+  ngOnDestroy(): void {
+    if (!this.mql) return;
+    if (this.mql.removeEventListener) {
+      this.mql.removeEventListener('change', this.onMqlChange);
+    } else {
+      (this.mql as any).addListener(this.onMqlChange);
+    }
   }
 }

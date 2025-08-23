@@ -6,45 +6,51 @@
     </div>
   } @else {
     @if (isMobile()) {
-      <div class="mobile-view">
-        <div class="button-container">
-          <button class="mButton" matFab extended type="button" (click)="openDialog('income')">
-            Add Income
-            <mat-icon>add_circle_outline</mat-icon>
-          </button>
-          <button class="mButton" matFab extended type="button" (click)="openDialog('transaction')">
-            Add Outcome
-            <mat-icon>remove_circle_outline</mat-icon>
-          </button>
+      @if (isLandscape()) {
+        <div class="orientation-overlay" aria-live="polite" role="dialog">
+          <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
         </div>
-        <div class="upload-button-container">
-          <button class="mButton" matFab extended type="button" (click)="openUploadEvidenceDialog()">
-            Upload Evidence
-            <mat-icon>cloud_upload</mat-icon>
-          </button>
+      } @else {
+        <div class="mobile-view">
+          <div class="button-container">
+            <button class="mButton" matFab extended type="button" (click)="openDialog('income')">
+              Add Income
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <button class="mButton" matFab extended type="button" (click)="openDialog('transaction')">
+              Add Outcome
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </div>
+          <div class="upload-button-container">
+            <button class="mButton" matFab extended type="button" (click)="openUploadEvidenceDialog()">
+              Upload Evidence
+              <mat-icon>cloud_upload</mat-icon>
+            </button>
+          </div>
+          <div class="cards-container-mobile">
+            <app-card
+              [cardTitle]="'Total Balance'"
+              [cardBody]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
+              [expandable]="true"
+              [imageSrc]="balanceEvidence()?.url"
+            ></app-card>
+            <app-card
+              [cardType]="'card-income'"
+              [cardTitle]="'Total Income'"
+              [cardBody]="totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+            />
+            <app-card
+              [cardType]="'card-outcome'"
+              [cardTitle]="'Total Outcome'"
+              [cardBody]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+            />
+          </div>
+          <div class="list-container">
+            <app-mobile-list/>
+          </div>
         </div>
-        <div class="cards-container-mobile">
-          <app-card
-            [cardTitle]="'Total Balance'"
-            [cardBody]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
-            [expandable]="true"
-            [imageSrc]="balanceEvidence()?.url"
-          ></app-card>
-          <app-card
-            [cardType]="'card-income'"
-            [cardTitle]="'Total Income'"
-            [cardBody]="totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
-          />
-          <app-card
-            [cardType]="'card-outcome'"
-            [cardTitle]="'Total Outcome'"
-            [cardBody]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
-          />
-        </div>
-        <div class="list-container">
-          <app-mobile-list/>
-        </div>
-      </div>
+      }
     } @else {
       <div class="dashboard-container">
         <div class="balance-container">
