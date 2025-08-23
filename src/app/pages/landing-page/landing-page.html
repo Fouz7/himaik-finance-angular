@@ -1,36 +1,42 @@
 <app-header [isLoggedIn]="(isLoggedIn$ | async)" (buttonClick)="onLogin()"/>
 @if (isMobile()) {
-  <main class="mobile-view">
-    <div id="cards-container">
-      @if (balance(); as bal) {
-        <app-card
-          [cardTitle]="'Total Balance'"
-          [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
-          [expandable]="true"
-          [imageSrc]="balanceEvidence()?.url"
-        ></app-card>
-      }
-
-      @if (totalIncome(); as income) {
-        <app-card
-          [cardTitle]="'Total Income'"
-          [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
-          [cardType]="'card-income'"
-        ></app-card>
-      }
-
-      @if (totalOutcome(); as outcome) {
-        <app-card
-          [cardTitle]="'Total Outcome'"
-          [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
-          [cardType]="'card-outcome'"
-        ></app-card>
-      }
+  @if (isLandscape()) {
+    <div class="orientation-overlay" aria-live="polite" role="dialog">
+      <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
     </div>
-    <div class="list-container">
-      <app-mobile-list/>
-    </div>
-  </main>
+  } @else {
+    <main class="mobile-view">
+      <div id="cards-container">
+        @if (balance(); as bal) {
+          <app-card
+            [cardTitle]="'Total Balance'"
+            [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
+            [expandable]="true"
+            [imageSrc]="balanceEvidence()?.url"
+          ></app-card>
+        }
+
+        @if (totalIncome(); as income) {
+          <app-card
+            [cardTitle]="'Total Income'"
+            [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+            [cardType]="'card-income'"
+          ></app-card>
+        }
+
+        @if (totalOutcome(); as outcome) {
+          <app-card
+            [cardTitle]="'Total Outcome'"
+            [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+            [cardType]="'card-outcome'"
+          ></app-card>
+        }
+      </div>
+      <div class="list-container">
+        <app-mobile-list/>
+      </div>
+    </main>
+  }
 } @else {
   <main class="desktop-view">
     <div id="cards-container">

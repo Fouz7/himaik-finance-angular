@@ -2,6 +2,18 @@ main {
   display: flex;
 }
 
+.orientation-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--background-color);
+  color: var(--text-color);
+  z-index: 9999;
+  text-align: center;
+  padding: 2rem;
+}
+
 #cards-container, #table-container {
   flex: 1;
   padding: 0.5rem;
