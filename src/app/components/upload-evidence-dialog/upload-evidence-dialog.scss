@@ -1,0 +1,13 @@
+.preview {
+  width: auto;
+  height: 600px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .preview {
+    max-height: 78vh;
+  }
+}
