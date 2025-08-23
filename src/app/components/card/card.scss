@@ -46,6 +46,29 @@
   color: var(--outcome-color);
 }
 
+.card.clickable { cursor: pointer; }
+
+.card.expanded { height: auto; }
+
+.card-extra {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-extra.open { max-height: 820px; }
+
+.card-extra img {
+  width: auto;
+  height: 600px;
+  display: block;
+  border-radius: 8px;
+}
+
 @media (max-width: 768px) {
   .card {
     height: auto;

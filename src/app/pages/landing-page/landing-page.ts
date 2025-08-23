@@ -38,6 +38,7 @@ export class LandingPage {
   balance: Signal<any | undefined> = toSignal(this.balanceService.getBalance());
   totalIncome: Signal<any | undefined> = toSignal(this.balanceService.getTotalIncome());
   totalOutcome: Signal<any | undefined> = toSignal(this.balanceService.getTotalOutcome());
+  balanceEvidence: Signal<any | undefined> = toSignal(this.balanceService.showBalanceEvidence());
 
   isMobile = toSignal(
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])

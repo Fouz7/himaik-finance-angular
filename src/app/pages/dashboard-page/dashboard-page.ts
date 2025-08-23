@@ -1,4 +1,4 @@
-import {Component, inject, WritableSignal, signal} from '@angular/core';
+import {Component, inject, WritableSignal, signal, Signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthServices} from '../../services/auth-services';
 import {IncomeService} from '../../services/income-service';
@@ -13,7 +13,6 @@ import {OutcomeTableComponent} from '../../components/outcome-table/outcome-tabl
 import {InputDialog} from '../../components/input-dialog/input-dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {ConfirmationDialog} from '../../components/confirmation-dialog/confirmation-dialog';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {map} from 'rxjs/operators';
@@ -21,6 +20,9 @@ import {MobileList} from '../../components/mobile-list/mobile-list';
 import {Card} from '../../components/card/card';
 import {Balance} from '../../components/balance/balance';
 import {MatFabButton} from '@angular/material/button';
+import {EvidenceDialog} from '../../components/evidence-dialog/evidence-dialog';
+import {UploadEvidenceDialog} from '../../components/upload-evidence-dialog/upload-evidence-dialog';
+import {ConfirmationDialog} from '../../components/confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -34,7 +36,6 @@ import {MatFabButton} from '@angular/material/button';
     OutcomeTableComponent,
     InputDialog,
     MatProgressSpinnerModule,
-    ConfirmationDialog,
     MobileList,
     Balance,
     MatFabButton
@@ -59,6 +60,7 @@ export class DashboardPage {
   balance: WritableSignal<any | undefined> = signal(undefined);
   totalIncome: WritableSignal<any | undefined> = signal(undefined);
   totalOutcome: WritableSignal<any | undefined> = signal(undefined);
+  balanceEvidence: Signal<any | undefined> = toSignal(this.balanceService.showBalanceEvidence());
 
   isMobile = toSignal(
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -133,5 +135,26 @@ export class DashboardPage {
     });
 
     this.showDialog = false;
+  }
+
+  openBalanceEvidenceDialog(): void {
+    const url = this.balanceEvidence()?.url;
+    if (!url) return;
+    this.dialog.open(EvidenceDialog, {
+      data: {imageUrl: url}
+    });
+  }
+
+  updateEvidence(): void {
+    const ref = this.dialog.open(UploadEvidenceDialog, {
+      width: '520px',
+      disableClose: true
+    });
+    ref.afterClosed().subscribe(() => {
+    });
+  }
+
+  openUploadEvidenceDialog(): void {
+    this.updateEvidence();
   }
 }
