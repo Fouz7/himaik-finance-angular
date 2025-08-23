@@ -4,12 +4,16 @@
 @use '@angular/material' as mat;
 @import "./app/styles/theme.css";
 
-
-You can add global styles to this file, and also import other style files */
-
 :root {
   @include mat.form-field-overrides((
     filled-input-text-color: var(--text-color),
+
+  ));
+
+  @include mat.snack-bar-overrides((
+    button-color: var(--text-color),
+    supporting-text-color: var(--text-color),
+    container-color: var(--background-color),
   ));
 }
 
@@ -28,6 +32,7 @@ You can add global styles to this file, and also import other style files */
 @media (max-width: 768px) {
   :root {
     @include mat.tabs-overrides((
+      active-indicator-color: var(--secondary-background-color),
       active-focus-indicator-color: var(--secondary-background-color),
       active-focus-label-text-color: var(--primary),
       divider-color: var(--secondary-background-color),
@@ -37,6 +42,7 @@ You can add global styles to this file, and also import other style files */
 :root {
   @include mat.fab-overrides((
     container-color: var(--background-color),
+    foreground-color: var(--text-color),
   ));
 }
 
