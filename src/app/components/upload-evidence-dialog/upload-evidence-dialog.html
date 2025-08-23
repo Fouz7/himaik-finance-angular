@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Upload Evidence</h2>
+@if (!previewUrl) {
+  <div mat-dialog-content class="content">
+    <ngx-file-drop
+      dropZoneLabel="Drop image here or click to browse"
+      accept="image/*"
+      [multiple]="false"
+      (onFileDrop)="dropped($event)"
+    >
+      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+        <div
+          class="dropzone-content"
+          role="button"
+          tabindex="0"
+          (click)="openFileSelector()"
+          (keydown.enter)="openFileSelector()"
+          (keydown.space)="openFileSelector()"
+        >
+          <p>Drop image here or click to browse</p>
+        </div>
+      </ng-template>
+    </ngx-file-drop>
+  </div>
+} @else {
+  <img [src]="previewUrl" alt="preview" class="preview"/>
+}
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="uploading">Cancel</button>
+  <button mat-button type="button" color="warn" (click)="remove()" [disabled]="!file || uploading">Remove</button>
+  <button mat-button color="primary" type="button" (click)="upload()" [disabled]="!file || uploading">
+    {{ uploading ? 'Uploading...' : 'Upload' }}
+  </button>
+</div>
