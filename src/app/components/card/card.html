@@ -1,8 +1,18 @@
-<div class="card" [ngClass]="cardType()">
+<div
+  class="card"
+  [ngClass]="[cardType(), expanded() ? 'expanded' : '', expandable() ? 'clickable' : '']"
+  (click)="onCardClick()"
+>
   <div class="card-title">
     <h2 class="card-title-text">{{ cardTitle() }}</h2>
   </div>
   <div class="card-body">
     <p class="card-body-text">{{ cardBody() }}</p>
   </div>
+
+  @if (expandable() && imageSrc()) {
+    <div class="card-extra" [class.open]="expanded()">
+      <img [src]="imageSrc()!" alt="card image" />
+    </div>
+  }
 </div>

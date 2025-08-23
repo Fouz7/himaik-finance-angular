@@ -17,11 +17,19 @@
             <mat-icon>remove_circle_outline</mat-icon>
           </button>
         </div>
+        <div class="upload-button-container">
+          <button class="mButton" matFab extended type="button" (click)="openUploadEvidenceDialog()">
+            Upload Evidence
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
         <div class="cards-container-mobile">
           <app-card
             [cardTitle]="'Total Balance'"
             [cardBody]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
-          />
+            [expandable]="true"
+            [imageSrc]="balanceEvidence()?.url"
+          ></app-card>
           <app-card
             [cardType]="'card-income'"
             [cardTitle]="'Total Income'"
@@ -56,6 +64,7 @@
           />
         </div>
         <div class="button-container">
+          <mat-icon class="clickable" (click)="openBalanceEvidenceDialog()">image</mat-icon>
           <mat-icon (click)="openDialog('income')">add_circle_outline</mat-icon>
           <mat-icon (click)="openDialog('transaction')">remove_circle_outline</mat-icon>
         </div>

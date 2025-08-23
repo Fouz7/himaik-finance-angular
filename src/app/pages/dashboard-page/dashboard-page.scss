@@ -89,4 +89,13 @@ main {
       width: 50%;
     }
   }
+
+  .upload-button-container{
+    align-items: center;
+    margin: 0.5rem 0;
+
+    .mButton{
+      width: 100%;
+    }
+  }
 }
