@@ -1,7 +1,7 @@
-<app-header [isLoggedIn]="(isLoggedIn$ | async)" (buttonClick)="onLogin()"/>
+<app-header (buttonClick)="onLogin()" [isLoggedIn]="(isLoggedIn$ | async)"/>
 @if (isMobile()) {
   @if (isLandscape()) {
-    <div class="orientation-overlay" aria-live="polite" role="dialog">
+    <div aria-live="polite" class="orientation-overlay" role="dialog">
       <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
     </div>
   } @else {
@@ -9,8 +9,8 @@
       <div id="cards-container">
         @if (balance(); as bal) {
           <app-card
-            [cardTitle]="'Total Balance'"
             [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
+            [cardTitle]="'Total Balance'"
             [expandable]="true"
             [imageSrc]="balanceEvidence()?.url"
           ></app-card>
@@ -18,23 +18,36 @@
 
         @if (totalIncome(); as income) {
           <app-card
-            [cardTitle]="'Total Income'"
             [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+            [cardTitle]="'Total Income'"
             [cardType]="'card-income'"
           ></app-card>
         }
 
         @if (totalOutcome(); as outcome) {
           <app-card
-            [cardTitle]="'Total Outcome'"
             [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+            [cardTitle]="'Total Outcome'"
             [cardType]="'card-outcome'"
           ></app-card>
         }
       </div>
-      <div class="list-container">
-        <app-mobile-list/>
-      </div>
+      @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
+        <div class="list-container">
+          <app-mobile-list
+            [incomes]="mobileIncomes()"
+            [outcomes]="mobileOutcomes()"
+            [incomePage]="mobileIncomePage()"
+            [outcomePage]="mobileOutcomePage()"
+            [incomeHasMore]="mobileIncomeHasMore()"
+            [outcomeHasMore]="mobileOutcomeHasMore()"
+            [loadingIncome]="mobileLoadingIncome()"
+            [loadingOutcome]="mobileLoadingOutcome()"
+            [isLoading]="isMobileListLoading()"
+            (navigate)="onMobileNavigate($event)"
+          />
+        </div>
+      }
     </main>
   }
 } @else {
@@ -42,8 +55,8 @@
     <div id="cards-container">
       @if (balance(); as bal) {
         <app-card
-          [cardTitle]="'Total Balance'"
           [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
+          [cardTitle]="'Total Balance'"
           [expandable]="true"
           [imageSrc]="balanceEvidence()?.url"
         ></app-card>
@@ -51,23 +64,33 @@
 
       @if (totalIncome(); as income) {
         <app-card
-          [cardTitle]="'Total Income'"
           [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
+          [cardTitle]="'Total Income'"
           [cardType]="'card-income'"
         ></app-card>
       }
 
       @if (totalOutcome(); as outcome) {
         <app-card
-          [cardTitle]="'Total Outcome'"
           [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
+          [cardTitle]="'Total Outcome'"
           [cardType]="'card-outcome'"
         ></app-card>
       }
     </div>
 
-    <div id="table-container">
-      <app-table-container/>
-    </div>
+    @if (!isTableLoading() && incomeData().length > 0 && outcomeData().length > 0) {
+      <div id="table-container">
+        <app-table-container
+          (incomePageChange)="onIncomePageChange($event)"
+          (outcomePageChange)="onOutcomePageChange($event)"
+          [incomeData]="incomeData()"
+          [outcomeData]="outcomeData()"
+          [totalIncomes]="totalIncomes()"
+          [totalOutcomes]="totalOutcomes()"
+          [isLoading]="isTableLoading()"
+        />
+      </div>
+    }
   </main>
 }
