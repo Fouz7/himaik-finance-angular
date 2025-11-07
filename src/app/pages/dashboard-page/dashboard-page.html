@@ -46,9 +46,22 @@
               [cardBody]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
             />
           </div>
-          <div class="list-container">
-            <app-mobile-list/>
-          </div>
+          @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
+            <div class="list-container">
+              <app-mobile-list
+                [incomes]="mobileIncomes()"
+                [outcomes]="mobileOutcomes()"
+                [incomePage]="mobileIncomePage()"
+                [outcomePage]="mobileOutcomePage()"
+                [incomeHasMore]="mobileIncomeHasMore()"
+                [outcomeHasMore]="mobileOutcomeHasMore()"
+                [loadingIncome]="mobileLoadingIncome()"
+                [loadingOutcome]="mobileLoadingOutcome()"
+                [isLoading]="isMobileListLoading()"
+                (navigate)="onMobileNavigate($event)"
+              />
+            </div>
+          }
         </div>
       }
     } @else {
