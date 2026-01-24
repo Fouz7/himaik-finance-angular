@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {AuthServices} from '../../services/auth-services';
-import {CommonModule} from '@angular/common';
+
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {toSignal} from '@angular/core/rxjs-interop';
@@ -14,10 +14,9 @@ import {map} from 'rxjs/operators';
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule,
     MatSnackBarModule,
     MatProgressSpinnerModule
-  ],
+],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss'
 })

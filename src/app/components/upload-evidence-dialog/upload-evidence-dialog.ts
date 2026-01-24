@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { BalanceService } from '../../services/balance-service';
@@ -12,7 +12,7 @@ import {
 @Component({
   selector: 'app-upload-evidence-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, NgxFileDropModule],
+  imports: [MatDialogModule, MatButtonModule, NgxFileDropModule],
   templateUrl: './upload-evidence-dialog.html',
   styleUrl: './upload-evidence-dialog.scss'
 })
