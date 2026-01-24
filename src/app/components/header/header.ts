@@ -1,16 +1,15 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
-import {CommonModule} from '@angular/common';
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     MatIconModule,
-    MatIconButton,
-    CommonModule
-  ],
+    MatIconButton
+],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })

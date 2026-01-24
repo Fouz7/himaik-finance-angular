@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, Renderer2, ElementRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -13,13 +13,12 @@ import {provideNativeDateAdapter} from '@angular/material/core';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatIconModule,
     MatButtonModule
-  ],
+],
   providers: [provideNativeDateAdapter()],
   templateUrl: './input-dialog.html',
   styleUrl: './input-dialog.scss'
