@@ -103,9 +103,9 @@
 }
 
 .card-extra.open {
-  /* Fill remaining space in the card */
+  /* Fill remaining space in the card, but allow it to stretch parent vertically if needed */
   flex: 1;
-  max-height: none;
+  max-height: clamp(300px, 60vh, 1200px);
   opacity: 1;
   transform: scaleY(1);
   min-height: 0;
@@ -126,19 +126,16 @@
   border-radius: 8px;
 }
 
-@media (max-width: 768px) {
-  .card {
-    height: auto;
-    flex: none;
-    padding: 0.2rem 1rem;
-    margin: 0.5rem 0;
+@media (max-width: 960px) {
+  .card-extra.open {
+    /* Allow much larger natural height in mobile layout so the full image can dictate its own size */
+    max-height: 2000px;
   }
 
-  .card-body-text {
-    font-size: 1.5rem;
-  }
-
-  .card-title-text {
-    font-size: medium;
+  .card-extra img {
+    /* Let the image fill the container width and scale naturally */
+    width: 100%;
+    max-height: none;
+    object-fit: contain;
   }
 }

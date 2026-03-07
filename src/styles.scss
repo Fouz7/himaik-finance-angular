@@ -95,6 +95,25 @@ app-dashboard-page {
   overflow: hidden;
 }
 
+@media (max-width: 960px) {
+
+  html,
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  app-root,
+  app-landing-page,
+  app-login-page,
+  app-dashboard-page {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+}
+
 /* ===== GLOBAL: Force mat-table to use flex layout for dynamic row stretching ===== */
 
 /* The <table> element itself becomes a flex column */

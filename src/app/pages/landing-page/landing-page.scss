@@ -1,8 +1,10 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  /* Allow the page to grow larger than 100vh and scroll naturally if content exceeds viewport */
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 main.desktop-view {
@@ -13,15 +15,22 @@ main.desktop-view {
   /* Match header's left/right margin (0.5rem) so edges align */
   padding: 0 0.5rem;
   gap: clamp(0.5rem, 1vw, 1rem);
+  /* Desktop keeps the hidden constraints to stay on one screen */
   overflow: hidden;
+  max-height: calc(100vh - 60px);
+  /* rough header height */
 }
 
 main.mobile-view {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  /* Match header's left/right margin (0.5rem) so edges align precisely */
+  padding: 0 0.5rem;
+  gap: clamp(0.5rem, 2vh, 1rem);
+  /* Allow scrolling down naturally in mobile view */
+  overflow-y: auto;
+  min-height: 100%;
 }
 
 .orientation-overlay {
@@ -36,9 +45,9 @@ main.mobile-view {
   padding: 2rem;
 }
 
-/* Cards container: 50% width, stretch cards to fill entire height */
+/* Cards container: Desktop 50% width, mobile full width */
 #cards-container {
-  flex: 1 1 0;
+  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -46,8 +55,34 @@ main.mobile-view {
   padding: clamp(0.25rem, 0.5vh, 0.5rem) 0;
 }
 
-/* Enable smooth flex transitions for the child elements */
-#cards-container>.main-card-wrapper {
+/* Explicit behaviors for mobile-view cards */
+main.mobile-view #cards-container {
+  /* Let container grow with its content when expanded vertically */
+  flex: none;
+  min-height: min-content;
+  /* Separate cards reasonably using gap */
+  gap: clamp(0.5rem, 1vh, 1rem);
+  padding-bottom: 0.5rem;
+}
+
+/* Secondary cards container needs gap in mobile too */
+main.mobile-view #cards-container .secondary-cards {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vh, 1rem);
+  flex: none;
+}
+
+/* On mobile, cards need a realistic minimum size */
+main.mobile-view #cards-container ::ng-deep app-card {
+  display: flex;
+  min-height: clamp(80px, 12vh, 120px);
+  flex: none;
+  /* Do not stretch */
+}
+
+/* Enable smooth flex transitions for the child elements ONLY ON DESKTOP */
+main.desktop-view #cards-container>.main-card-wrapper {
   flex: 1;
   display: flex;
   min-height: 0;
@@ -55,7 +90,7 @@ main.mobile-view {
 }
 
 /* Secondary cards container holds 2 cards, so it gets flex: 2 compared to main card's flex: 1 */
-#cards-container .secondary-cards {
+main.desktop-view #cards-container .secondary-cards {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -70,14 +105,14 @@ main.mobile-view {
 }
 
 /* The cards inside secondary-cards split space evenly */
-#cards-container .secondary-cards ::ng-deep app-card {
+main.desktop-view #cards-container .secondary-cards ::ng-deep app-card {
   flex: 1;
   display: flex;
   min-height: 0;
 }
 
-/* Smooth hide for the secondary cards when balance is expanded */
-#cards-container.balance-expanded .secondary-cards {
+/* Smooth hide for the secondary cards when balance is expanded (ONLY ON DESKTOP) */
+main.desktop-view #cards-container.balance-expanded .secondary-cards {
   flex: 0;
   opacity: 0;
   gap: 0;

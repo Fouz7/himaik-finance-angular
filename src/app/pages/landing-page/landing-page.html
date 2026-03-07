@@ -1,10 +1,5 @@
 <app-header (buttonClick)="onLogin()" [isLoggedIn]="(isLoggedIn$ | async)" />
 @if (isMobile()) {
-@if (isLandscape()) {
-<div aria-live="polite" class="orientation-overlay" role="dialog">
-  <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
-</div>
-} @else {
 <main class="mobile-view">
   <div id="cards-container">
     @if (balance(); as bal) {
@@ -32,7 +27,6 @@
   </div>
   }
 </main>
-}
 } @else {
 <main class="desktop-view">
   <div id="cards-container" [class.balance-expanded]="balanceExpanded()">
