@@ -3,34 +3,45 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   100% {
     transform: translateX(0);
     opacity: 1;
   }
 }
 
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .table {
   background-color: var(--background-color);
   border-radius: 12px;
-  height: calc((24vh + 1rem) * 3);
-  padding: 1rem;
-  margin: 1rem 0;
+  flex: 1;
+  min-height: 0;
+  padding: clamp(0.3rem, 0.8vw, 0.8rem);
   animation: slideInFromRight 0.5s ease-out;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.mat-mdc-table  {
-  background: transparent;
+.table .mat-mdc-tab-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.mat-mdc-paginator {
-  background-color: transparent;
-}
-
-.mat-mdc-header-row, .mat-mdc-row {
-  height: 40px; /* Sesuaikan nilai ini sesuai kebutuhan Anda */
-}
-
-.mat-mdc-cell {
-  padding-top: 4px;
-  padding-bottom: 4px;
+.table-wrapper {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }

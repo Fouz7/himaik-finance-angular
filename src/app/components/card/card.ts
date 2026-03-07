@@ -1,4 +1,4 @@
-import {Component, input, InputSignal, signal} from '@angular/core';
+import { Component, input, InputSignal, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,9 +15,12 @@ export class Card {
   imageSrc: InputSignal<string | undefined> = input<string | undefined>(undefined);
   expanded = signal(false);
 
+  expandedChange = output<boolean>();
+
   onCardClick() {
     if (this.expandable()) {
       this.expanded.update(v => !v);
+      this.expandedChange.emit(this.expanded());
     }
   }
 

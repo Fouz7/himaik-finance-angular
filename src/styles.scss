@@ -1,50 +1,44 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 @import "./app/styles/theme.css";
 
 :root {
-  @include mat.form-field-overrides((
-    filled-input-text-color: var(--text-color),
+  @include mat.form-field-overrides((filled-input-text-color: var(--text-color),
 
-  ));
+    ));
 
-  @include mat.snack-bar-overrides((
-    button-color: var(--text-color),
-    supporting-text-color: var(--text-color),
-    container-color: var(--background-color),
-  ));
+  @include mat.snack-bar-overrides((button-color: var(--text-color),
+      supporting-text-color: var(--text-color),
+      container-color: var(--background-color),
+    ));
 }
 
 :root {
-  @include mat.progress-spinner-overrides((
-    active-indicator-color: var(--primary),
-  ));
+  @include mat.progress-spinner-overrides((active-indicator-color: var(--primary),
+    ));
 }
 
 :root {
-  @include mat.dialog-overrides((
-    container-color: var(--primary),
-  ));
+  @include mat.dialog-overrides((container-color: var(--primary),
+    ));
 }
 
 @media (max-width: 768px) {
   :root {
-    @include mat.tabs-overrides((
-      active-indicator-color: var(--secondary-background-color),
-      active-focus-indicator-color: var(--secondary-background-color),
-      active-focus-label-text-color: var(--primary),
-      divider-color: var(--secondary-background-color),
-      active-label-text-color: var(--background-color),
-    ));
+    @include mat.tabs-overrides((active-indicator-color: var(--secondary-background-color),
+        active-focus-indicator-color: var(--secondary-background-color),
+        active-focus-label-text-color: var(--primary),
+        divider-color: var(--secondary-background-color),
+        active-label-text-color: var(--background-color),
+      ));
   }
 }
+
 :root {
-  @include mat.fab-overrides((
-    container-color: var(--background-color),
-    foreground-color: var(--text-color),
-  ));
+  @include mat.fab-overrides((container-color: var(--background-color),
+      foreground-color: var(--text-color),
+    ));
 }
 
 :root {
@@ -60,5 +54,152 @@
   background: transparent;
 }
 
-html, body { height: 90vh; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #9C8F7C; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* Hide scrollbars */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #9C8F7C;
+}
+
+/* Full-height chain for Angular components */
+app-root,
+app-landing-page,
+app-login-page,
+app-dashboard-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== GLOBAL: Force mat-table to use flex layout for dynamic row stretching ===== */
+
+/* The <table> element itself becomes a flex column */
+app-table-container .mat-mdc-table {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+/* thead: fixed at top */
+app-table-container .mat-mdc-table thead {
+  display: block !important;
+  flex-shrink: 0 !important;
+}
+
+/* tbody: fills ALL remaining space */
+app-table-container .mat-mdc-table .mdc-data-table__content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+}
+
+/* Header row: single horizontal line */
+app-table-container .mdc-data-table__header-row {
+  display: flex !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+}
+
+/* Data rows: STRETCH EQUALLY to fill tbody — this is the key rule */
+app-table-container .mdc-data-table__row {
+  display: flex !important;
+  flex: 1 1 0 !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Header cells: horizontal in header row */
+app-table-container .mdc-data-table__header-cell {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  font-size: clamp(0.65rem, calc(0.5rem + 0.3vw + 0.15vh), 0.9rem) !important;
+}
+
+/* Data cells: horizontal in data row */
+app-table-container .mdc-data-table__cell {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  font-size: clamp(0.65rem, calc(0.5rem + 0.3vw + 0.15vh), 0.9rem) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ===== GLOBAL: Force mat-tab-body chain to be flex ===== */
+app-table-container .mat-mdc-tab-body-wrapper {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+app-table-container .mat-mdc-tab-body {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+app-table-container .mat-mdc-tab-body-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Mat paginator compact */
+app-table-container .mat-mdc-paginator {
+  flex-shrink: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide all scrollbars everywhere */
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}

@@ -1,19 +1,19 @@
-import {Component, inject, OnDestroy, OnInit, Signal, signal} from '@angular/core';
-import {Header} from '../../components/header/header';
-import {Card} from '../../components/card/card';
-import {BalanceService} from '../../services/balance-service';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {CommonModule} from '@angular/common';
-import {TableContainer} from '../../components/table-container/table-container';
-import {AuthServices} from '../../services/auth-services';
-import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {MobileList} from '../../components/mobile-list/mobile-list';
-import {Income, IncomeService} from '../../services/income-service';
-import {Outcome, TransactionService} from '../../services/transaction-service';
-import {PageEvent} from '@angular/material/paginator';
+import { Component, inject, OnDestroy, OnInit, Signal, signal } from '@angular/core';
+import { Header } from '../../components/header/header';
+import { Card } from '../../components/card/card';
+import { BalanceService } from '../../services/balance-service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { TableContainer } from '../../components/table-container/table-container';
+import { AuthServices } from '../../services/auth-services';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MobileList } from '../../components/mobile-list/mobile-list';
+import { Income, IncomeService } from '../../services/income-service';
+import { Outcome, TransactionService } from '../../services/transaction-service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-landing-page',
@@ -57,6 +57,7 @@ export class LandingPage implements OnInit, OnDestroy {
   outcomeData = signal<Outcome[]>([]);
   totalOutcomes = signal<number>(0);
   isTableLoading = signal<boolean>(true);
+  balanceExpanded = signal<boolean>(false);
 
   mobileIncomes = signal<Income[]>([]);
   mobileOutcomes = signal<Outcome[]>([]);
@@ -87,7 +88,7 @@ export class LandingPage implements OnInit, OnDestroy {
   isMobile = toSignal(
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(map(result => result.matches)),
-    {initialValue: false}
+    { initialValue: false }
   );
 
   isLandscape(): boolean {
@@ -96,6 +97,10 @@ export class LandingPage implements OnInit, OnDestroy {
 
   onLogin() {
     this.router.navigate(['/login']);
+  }
+
+  onBalanceExpand(expanded: boolean) {
+    this.balanceExpanded.set(expanded);
   }
 
   onIncomePageChange(event: PageEvent) {

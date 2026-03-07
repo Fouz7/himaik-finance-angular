@@ -1,96 +1,66 @@
-<app-header (buttonClick)="onLogin()" [isLoggedIn]="(isLoggedIn$ | async)"/>
+<app-header (buttonClick)="onLogin()" [isLoggedIn]="(isLoggedIn$ | async)" />
 @if (isMobile()) {
-  @if (isLandscape()) {
-    <div aria-live="polite" class="orientation-overlay" role="dialog">
-      <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
-    </div>
-  } @else {
-    <main class="mobile-view">
-      <div id="cards-container">
-        @if (balance(); as bal) {
-          <app-card
-            [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
-            [cardTitle]="'Total Balance'"
-            [expandable]="true"
-            [imageSrc]="balanceEvidence()?.url"
-          ></app-card>
-        }
-
-        @if (totalIncome(); as income) {
-          <app-card
-            [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
-            [cardTitle]="'Total Income'"
-            [cardType]="'card-income'"
-          ></app-card>
-        }
-
-        @if (totalOutcome(); as outcome) {
-          <app-card
-            [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
-            [cardTitle]="'Total Outcome'"
-            [cardType]="'card-outcome'"
-          ></app-card>
-        }
-      </div>
-      @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
-        <div class="list-container">
-          <app-mobile-list
-            [incomes]="mobileIncomes()"
-            [outcomes]="mobileOutcomes()"
-            [incomePage]="mobileIncomePage()"
-            [outcomePage]="mobileOutcomePage()"
-            [incomeHasMore]="mobileIncomeHasMore()"
-            [outcomeHasMore]="mobileOutcomeHasMore()"
-            [loadingIncome]="mobileLoadingIncome()"
-            [loadingOutcome]="mobileLoadingOutcome()"
-            [isLoading]="isMobileListLoading()"
-            (navigate)="onMobileNavigate($event)"
-          />
-        </div>
-      }
-    </main>
-  }
+@if (isLandscape()) {
+<div aria-live="polite" class="orientation-overlay" role="dialog">
+  <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
+</div>
 } @else {
-  <main class="desktop-view">
-    <div id="cards-container">
-      @if (balance(); as bal) {
-        <app-card
-          [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
-          [cardTitle]="'Total Balance'"
-          [expandable]="true"
-          [imageSrc]="balanceEvidence()?.url"
-        ></app-card>
-      }
+<main class="mobile-view">
+  <div id="cards-container">
+    @if (balance(); as bal) {
+    <app-card [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Balance'"
+      [expandable]="true" [imageSrc]="balanceEvidence()?.url"></app-card>
+    }
 
+    @if (totalIncome(); as income) {
+    <app-card [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Income'"
+      [cardType]="'card-income'"></app-card>
+    }
+
+    @if (totalOutcome(); as outcome) {
+    <app-card [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Outcome'"
+      [cardType]="'card-outcome'"></app-card>
+    }
+  </div>
+  @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
+  <div class="list-container">
+    <app-mobile-list [incomes]="mobileIncomes()" [outcomes]="mobileOutcomes()" [incomePage]="mobileIncomePage()"
+      [outcomePage]="mobileOutcomePage()" [incomeHasMore]="mobileIncomeHasMore()"
+      [outcomeHasMore]="mobileOutcomeHasMore()" [loadingIncome]="mobileLoadingIncome()"
+      [loadingOutcome]="mobileLoadingOutcome()" [isLoading]="isMobileListLoading()"
+      (navigate)="onMobileNavigate($event)" />
+  </div>
+  }
+</main>
+}
+} @else {
+<main class="desktop-view">
+  <div id="cards-container" [class.balance-expanded]="balanceExpanded()">
+    @if (balance(); as bal) {
+    <app-card class="main-card-wrapper" [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
+      [cardTitle]="'Total Balance'" [expandable]="true" [imageSrc]="balanceEvidence()?.url"
+      (expandedChange)="onBalanceExpand($event)"></app-card>
+    }
+
+    <div class="secondary-cards">
       @if (totalIncome(); as income) {
-        <app-card
-          [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'"
-          [cardTitle]="'Total Income'"
-          [cardType]="'card-income'"
-        ></app-card>
+      <app-card [cardBody]="income.totalIncome | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Income'"
+        [cardType]="'card-income'"></app-card>
       }
 
       @if (totalOutcome(); as outcome) {
-        <app-card
-          [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'"
-          [cardTitle]="'Total Outcome'"
-          [cardType]="'card-outcome'"
-        ></app-card>
+      <app-card [cardBody]="outcome.totalOutcome | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Outcome'"
+        [cardType]="'card-outcome'"></app-card>
       }
     </div>
+  </div>
 
-    @if (!isTableLoading() && incomeData().length > 0 && outcomeData().length > 0) {
-      <div id="table-container">
-        <app-table-container
-          (incomePageChange)="onIncomePageChange($event)"
-          (outcomePageChange)="onOutcomePageChange($event)"
-          [incomeData]="incomeData()"
-          [outcomeData]="outcomeData()"
-          [totalIncomes]="totalIncomes()"
-          [totalOutcomes]="totalOutcomes()"
-          [isLoading]="isTableLoading()"
-        />
-      </div>
-    }
-  </main>
+  @if (!isTableLoading() && incomeData().length > 0 && outcomeData().length > 0) {
+  <div id="table-container">
+    <app-table-container (incomePageChange)="onIncomePageChange($event)"
+      (outcomePageChange)="onOutcomePageChange($event)" [incomeData]="incomeData()" [outcomeData]="outcomeData()"
+      [totalIncomes]="totalIncomes()" [totalOutcomes]="totalOutcomes()" [isLoading]="isTableLoading()" />
+  </div>
+  }
+</main>
 }

@@ -1,5 +1,27 @@
-main {
+:host {
   display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+main.desktop-view {
+  display: flex;
+  /* Fill all remaining space after header */
+  flex: 1;
+  min-height: 0;
+  /* Match header's left/right margin (0.5rem) so edges align */
+  padding: 0 0.5rem;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  overflow: hidden;
+}
+
+main.mobile-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .orientation-overlay {
@@ -14,9 +36,68 @@ main {
   padding: 2rem;
 }
 
-#cards-container, #table-container {
+/* Cards container: 50% width, stretch cards to fill entire height */
+#cards-container {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 0.5vh, 0.5rem);
+  padding: clamp(0.25rem, 0.5vh, 0.5rem) 0;
+}
+
+/* Enable smooth flex transitions for the child elements */
+#cards-container>.main-card-wrapper {
   flex: 1;
-  padding: 0.5rem;
+  display: flex;
+  min-height: 0;
+  transition: flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Secondary cards container holds 2 cards, so it gets flex: 2 compared to main card's flex: 1 */
+#cards-container .secondary-cards {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: clamp(0.25rem, 0.5vh, 0.5rem);
+  opacity: 1;
+  overflow: hidden;
+  /* Animate both flex basis and opacity */
+  transition: flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    gap 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* The cards inside secondary-cards split space evenly */
+#cards-container .secondary-cards ::ng-deep app-card {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* Smooth hide for the secondary cards when balance is expanded */
+#cards-container.balance-expanded .secondary-cards {
+  flex: 0;
+  opacity: 0;
+  gap: 0;
+}
+
+/* Table container: 50% width, fill full height */
+#table-container {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.25rem, 0.5vh, 0.5rem) 0;
+}
+
+/* Table container inner component fills its parent */
+#table-container ::ng-deep app-table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 @keyframes slideInFromRight {
@@ -24,6 +105,7 @@ main {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -33,5 +115,3 @@ main {
 .list-container {
   animation: slideInFromRight 0.5s ease-out forwards;
 }
-
-
