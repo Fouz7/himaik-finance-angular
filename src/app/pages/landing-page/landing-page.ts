@@ -68,7 +68,7 @@ export class LandingPage implements OnInit, OnDestroy {
   mobileLoadingIncome = signal<boolean>(false);
   mobileLoadingOutcome = signal<boolean>(false);
   isMobileListLoading = signal<boolean>(true);
-  private readonly mobilePageSize = 5;
+  private readonly mobilePageSize = 10;
 
   ngOnInit(): void {
     this.mql = window.matchMedia('(orientation: landscape)');
@@ -79,8 +79,8 @@ export class LandingPage implements OnInit, OnDestroy {
     } else {
       (this.mql as any).addListener(this.onMqlChange);
     }
-    this.loadIncomes(1, 5);
-    this.loadOutcomes(1, 5);
+    this.loadIncomes(1, 10);
+    this.loadOutcomes(1, 10);
     this.loadMobileIncomes();
     this.loadMobileOutcomes();
   }
@@ -139,7 +139,11 @@ export class LandingPage implements OnInit, OnDestroy {
     this.mobileLoadingIncome.set(true);
 
     this.incomeService.getIncomes(this.mobileIncomePage(), this.mobilePageSize).subscribe(response => {
-      this.mobileIncomes.set(response.data);
+      if (this.mobileIncomePage() === 1) {
+        this.mobileIncomes.set(response.data);
+      } else {
+        this.mobileIncomes.update(data => [...data, ...response.data]);
+      }
       this.mobileIncomeHasMore.set((this.mobileIncomePage() * this.mobilePageSize) < response.pagination.totalItems);
       this.mobileLoadingIncome.set(false);
       this.checkMobileListLoadingComplete();
@@ -151,28 +155,28 @@ export class LandingPage implements OnInit, OnDestroy {
     this.mobileLoadingOutcome.set(true);
 
     this.transactionService.getOutcomes(this.mobileOutcomePage(), this.mobilePageSize).subscribe(response => {
-      this.mobileOutcomes.set(response.data);
+      if (this.mobileOutcomePage() === 1) {
+        this.mobileOutcomes.set(response.data);
+      } else {
+        this.mobileOutcomes.update(data => [...data, ...response.data]);
+      }
       this.mobileOutcomeHasMore.set((this.mobileOutcomePage() * this.mobilePageSize) < response.pagination.totalItems);
       this.mobileLoadingOutcome.set(false);
       this.checkMobileListLoadingComplete();
     });
   }
 
-  onMobileNavigate(event: { type: 'income' | 'outcome', direction: 'prev' | 'next' }) {
-    if (event.type === 'income') {
-      if (event.direction === 'next' && this.mobileIncomeHasMore()) {
+  onMobileLoadMore(type: 'income' | 'outcome') {
+    if (type === 'income') {
+      if (this.mobileIncomeHasMore() && !this.mobileLoadingIncome()) {
         this.mobileIncomePage.update(page => page + 1);
-      } else if (event.direction === 'prev' && this.mobileIncomePage() > 1) {
-        this.mobileIncomePage.update(page => page - 1);
+        this.loadMobileIncomes();
       }
-      this.loadMobileIncomes();
     } else {
-      if (event.direction === 'next' && this.mobileOutcomeHasMore()) {
+      if (this.mobileOutcomeHasMore() && !this.mobileLoadingOutcome()) {
         this.mobileOutcomePage.update(page => page + 1);
-      } else if (event.direction === 'prev' && this.mobileOutcomePage() > 1) {
-        this.mobileOutcomePage.update(page => page - 1);
+        this.loadMobileOutcomes();
       }
-      this.loadMobileOutcomes();
     }
   }
 

@@ -1,113 +1,297 @@
-main {
-  flex: 1;
+:host {
   display: flex;
   flex-direction: column;
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
-  height: 90vh;
+  /* Allow the page to grow larger than 100vh and scroll naturally if content exceeds viewport */
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
-.orientation-overlay {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: var(--background-color);
-  color: var(--text-color);
-  z-index: 9999;
-  text-align: center;
-  padding: 2rem;
+main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
 }
 
 .spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
   flex: 1;
 }
 
+/* =========================================
+   DESKTOP VIEW (.dashboard-container)
+   ========================================= */
+
 .dashboard-container {
-  background-color: var(--background-color);
-  border-radius: 12px;
-  color: var(--text-color);
+  flex: 1;
   display: flex;
   flex-direction: column;
-  margin: 1rem 0;
-  padding: 1rem;
+  background-color: var(--background-color);
+  border-radius: clamp(8px, 1.5vw, 12px);
+  color: var(--text-color);
+  margin: clamp(0.25rem, 1vh, 0.5rem) 0.5rem;
+  padding: clamp(0.75rem, 1.5vh, 1.25rem) 1rem;
+  gap: clamp(0.5rem, 1vh, 1rem);
+  min-height: 0;
+  overflow: hidden;
+  /* Keep tables constrained on desktop */
+  max-height: calc(100vh - 60px);
+  /* rough header+margins height */
 }
 
 .balance-container {
   display: flex;
   align-items: center;
-  justify-content: start;
-  gap: 6em;
+  justify-content: flex-start;
+  gap: clamp(0.5rem, 3vw, 4rem);
+  flex-wrap: wrap;
+}
+
+/* Let the desktop balances distribute nicely without spreading apart */
+.balance-container>* {
+  flex: none;
 }
 
 .button-container {
   display: flex;
-  gap: 0.5rem;
-  justify-content: end;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  justify-content: flex-end;
 
   mat-icon {
     cursor: pointer;
+    font-size: clamp(1.2rem, 1.2vw + 1vh + 0.2rem, 3rem);
+    width: clamp(1.2rem, 1.2vw + 1vh + 0.2rem, 3rem);
+    height: clamp(1.2rem, 1.2vw + 1vh + 0.2rem, 3rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
 .table-container {
-  background-color: var(--secondary-background-color);
-  border-radius: 12px;
+  flex: 1;
+  min-height: 0;
   display: flex;
+  flex-direction: row;
+  /* Horizontal tables by default on desktop */
   justify-content: space-around;
-  width: auto;
-  margin-top: 1rem;
-  padding: 1rem;
-  height: 50vh;
-}
+  gap: clamp(0.5rem, 1vw, 1rem);
+  padding: clamp(0.5rem, 1vh, 1rem);
+  background-color: var(--secondary-background-color);
+  border-radius: clamp(8px, 1.5vw, 12px);
 
-::ng-deep .mat-mdc-table .mat-mdc-header-cell,
-::ng-deep .mat-mdc-table .mat-mdc-cell {
-  color: #fff0c6 !important;
-}
-
-@media (max-width: 768px) {
-  main {
+  /* Force internal apps to flex properly and have distinct structural layout */
+  ::ng-deep app-income-table,
+  ::ng-deep app-outcome-table {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+  }
+}
+
+/* Table overrides */
+::ng-deep .table-content-wrapper {
+  flex: 1;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  overflow: auto;
+}
+
+::ng-deep .mat-mdc-table {
+  background-color: transparent !important;
+  width: 100%;
+  table-layout: fixed;
+  /* Locks columns from randomly resizing */
+}
+
+/* Conditionally stretch the full table height when there's enough data */
+::ng-deep .mat-mdc-table.stretch-table {
+  height: 100% !important;
+}
+
+::ng-deep .mat-mdc-header-row {
+  background-color: #DBC891 !important;
+  /* Distinct darker beige header */
+}
+
+::ng-deep .mat-mdc-row:nth-child(odd) {
+  background-color: var(--background-color) !important;
+  /* Regular beige */
+}
+
+::ng-deep .mat-mdc-row:nth-child(even) {
+  background-color: #E8D5A3 !important;
+  /* Slightly darker alternating row tone */
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-header-cell {
+  color: var(--text-color) !important;
+  font-weight: bold;
+  border-bottom: none !important;
+  font-size: clamp(0.85rem, 1vw + 0.3vh, 1.2rem) !important;
+  padding: clamp(0.5rem, 1.5vh, 1.25rem) clamp(0.5rem, 1vw, 1.5rem) !important;
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-cell {
+  color: var(--text-color) !important;
+  border-bottom: none !important;
+  font-size: clamp(0.85rem, 1vw + 0.3vh, 1.2rem) !important;
+  padding: clamp(0.5rem, 1.5vh, 1.25rem) clamp(0.5rem, 1vw, 1.5rem) !important;
+}
+
+/* Center-align specific columns */
+::ng-deep .mat-column-nominal,
+::ng-deep .mat-column-transfer_date,
+::ng-deep .mat-column-debit,
+::ng-deep .mat-column-credit,
+::ng-deep .mat-column-createdBy,
+::ng-deep .mat-column-createdAt {
+  text-align: center !important;
+}
+
+/* Assigned 100% ratio fixed widths specific per table */
+app-income-table {
+  ::ng-deep .mat-column-name {
+    width: 25%;
   }
 
-  .list-container {
-    border-radius: 12px;
-    background-color: var(--secondary-background-color);
-    height: 52vh;
-
-    @media (max-height: 740px) {
-      height: 63vh;
-    }
-
-    @media (max-height: 670px) {
-      height: 70vh;
-    }
+  ::ng-deep .mat-column-nominal {
+    width: 30%;
   }
 
-  .button-container{
+  ::ng-deep .mat-column-transfer_date {
+    width: 25%;
+  }
+
+  ::ng-deep .mat-column-createdBy {
+    width: 20%;
+  }
+}
+
+app-outcome-table {
+  ::ng-deep .mat-column-notes {
+    width: 30%;
+  }
+
+  ::ng-deep .mat-column-debit {
+    width: 17.5%;
+  }
+
+  ::ng-deep .mat-column-credit {
+    width: 17.5%;
+  }
+
+  ::ng-deep .mat-column-createdBy {
+    width: 15%;
+  }
+
+  ::ng-deep .mat-column-createdAt {
+    width: 20%;
+  }
+}
+
+/* Allow primary text columns to grow and wrap over long strings */
+::ng-deep .mat-column-notes,
+::ng-deep .mat-column-name {
+  white-space: normal !important;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================
+   MOBILE VIEW (.mobile-view)
+   ========================================= */
+
+.mobile-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 0.5rem;
+  gap: clamp(0.5rem, 2vh, 1rem);
+  /* Allow scrolling down naturally in mobile view */
+  overflow-y: auto;
+  min-height: 100%;
+  padding-bottom: 2rem;
+  /* Give breathing room at bottom */
+}
+
+/* Override existing button containers for mobile view */
+.mobile-view .button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  justify-content: space-between;
+
+  .mButton {
+    flex: 1;
+  }
+}
+
+.mobile-view .upload-button-container {
+  display: flex;
+  align-items: center;
+
+  .mButton {
+    flex: 1;
+    width: 100%;
+  }
+}
+
+.cards-container-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vh, 1rem);
+  flex: none;
+  min-height: min-content;
+
+  ::ng-deep app-card {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-right: 0.5rem;
-    justify-content: space-between;
+    min-height: clamp(80px, 12vh, 120px);
+    flex: none;
+  }
+}
 
-    .mButton{
-      width: 50%;
-    }
+.list-container {
+  border-radius: 12px;
+  background-color: var(--secondary-background-color);
+  overflow: hidden;
+  animation: slideInFromRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
 
-  .upload-button-container{
-    align-items: center;
-    margin: 0.5rem 0;
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
-    .mButton{
-      width: 100%;
-    }
+/* =========================================
+   MEDIA QUERIES (TABLETS & SHIFTS)
+   ========================================= */
+
+/* Adjust table container to stack on smaller laptops / tablets */
+@media (max-width: 1200px) {
+  .dashboard-container .table-container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  /* On stacked tables, allow them to grow based on contents, don't squish */
+  .dashboard-container .table-container ::ng-deep app-income-table,
+  .dashboard-container .table-container ::ng-deep app-outcome-table {
+    flex: none;
+    min-height: 300px;
   }
 }

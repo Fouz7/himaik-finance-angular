@@ -1,28 +1,28 @@
-import {Component, inject, WritableSignal, signal, Signal, OnInit, OnDestroy} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {AuthServices} from '../../services/auth-services';
-import {Income, IncomeService} from '../../services/income-service';
-import {Outcome, TransactionService} from '../../services/transaction-service';
-import {Header} from '../../components/header/header';
-import {forkJoin, Observable} from 'rxjs';
-import {CommonModule} from '@angular/common';
-import {BalanceService} from '../../services/balance-service';
-import {MatIcon} from '@angular/material/icon';
-import {IncomeTableComponent} from '../../components/income-table/income-table';
-import {OutcomeTableComponent} from '../../components/outcome-table/outcome-table';
-import {InputDialog} from '../../components/input-dialog/input-dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {map} from 'rxjs/operators';
-import {MobileList} from '../../components/mobile-list/mobile-list';
-import {Card} from '../../components/card/card';
-import {Balance} from '../../components/balance/balance';
-import {MatFabButton} from '@angular/material/button';
-import {EvidenceDialog} from '../../components/evidence-dialog/evidence-dialog';
-import {UploadEvidenceDialog} from '../../components/upload-evidence-dialog/upload-evidence-dialog';
-import {ConfirmationDialog} from '../../components/confirmation-dialog/confirmation-dialog';
+import { Component, inject, WritableSignal, signal, Signal, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthServices } from '../../services/auth-services';
+import { Income, IncomeService } from '../../services/income-service';
+import { Outcome, TransactionService } from '../../services/transaction-service';
+import { Header } from '../../components/header/header';
+import { forkJoin, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { BalanceService } from '../../services/balance-service';
+import { MatIcon } from '@angular/material/icon';
+import { IncomeTableComponent } from '../../components/income-table/income-table';
+import { OutcomeTableComponent } from '../../components/outcome-table/outcome-table';
+import { InputDialog } from '../../components/input-dialog/input-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
+import { MobileList } from '../../components/mobile-list/mobile-list';
+import { Card } from '../../components/card/card';
+import { Balance } from '../../components/balance/balance';
+import { MatFabButton } from '@angular/material/button';
+import { EvidenceDialog } from '../../components/evidence-dialog/evidence-dialog';
+import { UploadEvidenceDialog } from '../../components/upload-evidence-dialog/upload-evidence-dialog';
+import { ConfirmationDialog } from '../../components/confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -77,7 +77,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   mobileLoadingIncome = signal<boolean>(false);
   mobileLoadingOutcome = signal<boolean>(false);
   isMobileListLoading = signal<boolean>(true);
-  private readonly mobilePageSize = 5;
+  private readonly mobilePageSize = 10;
 
   constructor() {
     forkJoin({
@@ -115,7 +115,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   isMobile = toSignal(
     this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(map(result => result.matches)),
-    {initialValue: false}
+    { initialValue: false }
   );
 
   isLandscape(): boolean {
@@ -176,7 +176,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     const url = this.balanceEvidence()?.url;
     if (!url) return;
     this.dialog.open(EvidenceDialog, {
-      data: {imageUrl: url}
+      data: { imageUrl: url }
     });
   }
 
@@ -198,7 +198,11 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.mobileLoadingIncome.set(true);
 
     this.incomeService.getIncomes(this.mobileIncomePage(), this.mobilePageSize).subscribe(response => {
-      this.mobileIncomes.set(response.data);
+      if (this.mobileIncomePage() === 1) {
+        this.mobileIncomes.set(response.data);
+      } else {
+        this.mobileIncomes.update(data => [...data, ...response.data]);
+      }
       this.mobileIncomeHasMore.set((this.mobileIncomePage() * this.mobilePageSize) < response.pagination.totalItems);
       this.mobileLoadingIncome.set(false);
       this.checkMobileListLoadingComplete();
@@ -210,28 +214,28 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.mobileLoadingOutcome.set(true);
 
     this.transactionService.getOutcomes(this.mobileOutcomePage(), this.mobilePageSize).subscribe(response => {
-      this.mobileOutcomes.set(response.data);
+      if (this.mobileOutcomePage() === 1) {
+        this.mobileOutcomes.set(response.data);
+      } else {
+        this.mobileOutcomes.update(data => [...data, ...response.data]);
+      }
       this.mobileOutcomeHasMore.set((this.mobileOutcomePage() * this.mobilePageSize) < response.pagination.totalItems);
       this.mobileLoadingOutcome.set(false);
       this.checkMobileListLoadingComplete();
     });
   }
 
-  onMobileNavigate(event: { type: 'income' | 'outcome', direction: 'prev' | 'next' }) {
-    if (event.type === 'income') {
-      if (event.direction === 'next' && this.mobileIncomeHasMore()) {
-        this.mobileIncomePage.update((page: number) => page + 1);
-      } else if (event.direction === 'prev' && this.mobileIncomePage() > 1) {
-        this.mobileIncomePage.update((page: number) => page - 1);
+  onMobileLoadMore(type: 'income' | 'outcome') {
+    if (type === 'income') {
+      if (this.mobileIncomeHasMore() && !this.mobileLoadingIncome()) {
+        this.mobileIncomePage.update(page => page + 1);
+        this.loadMobileIncomes();
       }
-      this.loadMobileIncomes();
     } else {
-      if (event.direction === 'next' && this.mobileOutcomeHasMore()) {
-        this.mobileOutcomePage.update((page: number) => page + 1);
-      } else if (event.direction === 'prev' && this.mobileOutcomePage() > 1) {
-        this.mobileOutcomePage.update((page: number) => page - 1);
+      if (this.mobileOutcomeHasMore() && !this.mobileLoadingOutcome()) {
+        this.mobileOutcomePage.update(page => page + 1);
+        this.loadMobileOutcomes();
       }
-      this.loadMobileOutcomes();
     }
   }
 

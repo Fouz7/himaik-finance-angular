@@ -105,7 +105,8 @@
 .card-extra.open {
   /* Fill remaining space in the card, but allow it to stretch parent vertically if needed */
   flex: 1;
-  max-height: clamp(300px, 60vh, 1200px);
+  max-height: 2000px;
+  /* Removing restrictive 60vh cap so it fills the expanded card fully */
   opacity: 1;
   transform: scaleY(1);
   min-height: 0;
