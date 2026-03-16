@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { BalanceService } from '../../services/balance-service';
 import {
@@ -8,16 +8,20 @@ import {
   NgxFileDropEntry,
   FileSystemFileEntry
 } from 'ngx-file-drop';
+import { MatIconModule } from '@angular/material/icon';
+import { StatusDialog } from '../status-dialog/status-dialog';
+import { extractApiErrorMessage } from '../../Utils/api-error';
 
 @Component({
   selector: 'app-upload-evidence-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, NgxFileDropModule],
+  imports: [MatDialogModule, MatButtonModule, NgxFileDropModule, MatIconModule],
   templateUrl: './upload-evidence-dialog.html',
   styleUrl: './upload-evidence-dialog.scss'
 })
 export class UploadEvidenceDialog implements OnDestroy {
   private ref = inject(MatDialogRef<UploadEvidenceDialog>);
+  private dialog = inject(MatDialog);
   private balanceService = inject(BalanceService);
 
   file?: File;
@@ -50,10 +54,28 @@ export class UploadEvidenceDialog implements OnDestroy {
 
     this.balanceService.uploadBalanceEvidence(this.file).subscribe({
       next: (res: { url: string }) => {
-        this.ref.close({ imageUrl: res.url });
-      },
-      error: () => {
         this.uploading = false;
+        this.dialog.open(StatusDialog, {
+          panelClass: 'status-dialog-panel',
+          data: {
+            variant: 'success',
+            title: 'Upload Successful',
+            message: 'Balance evidence was uploaded successfully.'
+          }
+        }).afterClosed().subscribe(() => {
+          this.ref.close({ imageUrl: res.url });
+        });
+      },
+      error: (error: unknown) => {
+        this.uploading = false;
+        this.dialog.open(StatusDialog, {
+          panelClass: 'status-dialog-panel',
+          data: {
+            variant: 'error',
+            title: 'Upload Failed',
+            message: extractApiErrorMessage(error, 'Unable to upload balance evidence. Please try again.')
+          }
+        });
       }
     });
   }

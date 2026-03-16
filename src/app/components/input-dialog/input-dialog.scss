@@ -1,55 +1,152 @@
 :host {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.3);
   animation: fadeInBackdrop 0.2s;
+  overflow-y: auto;
 }
 
-@keyframes fadeInBackdrop {
-  from {
-    background: rgba(0, 0, 0, 0);
-  }
-  to {
-    background: rgba(0, 0, 0, 0.3);
-  }
-}
-
-.dialog-form {
-  background: var(--background-color);
+.dialog-card {
+  background-color: var(--background-color);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 6px rgba(0, 0, 0, 0.12);
-  min-width: 320px;
-  max-width: 90vw;
-  padding: 24px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: min(100%, 460px);
+  margin: auto;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
   animation: popupIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    10px 10px 15px -5px rgba(0, 0, 0, 0.3),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.1),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
 }
 
-.dialog-content {
+.dialog-card-header {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0.5rem;
 }
 
-.dialog-actions {
+.dialog-card-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.35rem, 4vw, 1.9rem);
+  font-weight: 700;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-subtitle {
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--text-color) 80%, white 20%);
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.06),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.25);
+}
+
+.dialog-card-body {
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
   gap: 1rem;
-
-  button {
-    width: 100%;
-  }
 }
 
-:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
-  background-color: #b8aa84;
+.dialog-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.dialog-card-button {
+  width: 100%;
+  min-height: 56px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-button:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.dialog-card-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.1),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.1),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.dialog-card-button-primary {
+  background-color: var(--secondary-background-color);
+  color: var(--background-color);
+  box-shadow:
+    5px 6px 14px rgba(64, 45, 20, 0.14),
+    inset -2px -2px 5px rgba(88, 67, 40, 0.08),
+    inset 2px 2px 5px rgba(254, 221, 185, 0.18);
+}
+
+.dialog-card-button-secondary {
+  background-color: rgba(255, 255, 255, 0.32);
+  color: var(--text-color);
+  box-shadow:
+    5px 6px 14px rgba(0, 0, 0, 0.12),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.08),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.24);
+}
+
+:host ::ng-deep .dialog-input-field {
+  width: 100%;
+  --mdc-outlined-text-field-outline-color: var(--text-color);
+  --mdc-outlined-text-field-hover-outline-color: var(--text-color);
+  --mdc-outlined-text-field-focus-outline-color: var(--text-color);
+  --mdc-outlined-text-field-label-text-color: var(--text-color);
+  --mdc-outlined-text-field-hover-label-text-color: var(--text-color);
+  --mdc-outlined-text-field-focus-label-text-color: var(--text-color);
+  --mdc-outlined-text-field-input-text-color: var(--text-color);
+  --mdc-filled-text-field-input-text-color: var(--text-color);
+  --mat-form-field-state-layer-color: transparent;
+  --mat-form-field-focus-state-layer-opacity: 0;
+  --mdc-outlined-text-field-container-shape: 8px;
+  filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.15));
+}
+
+:host ::ng-deep .dialog-input-field .mdc-text-field--outlined {
+  background-color: rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.12),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.5);
+}
+
+:host ::ng-deep .dialog-input-field .mat-mdc-form-field-hint,
+:host ::ng-deep .dialog-input-field .mat-datepicker-toggle,
+:host ::ng-deep .dialog-input-field .mat-datepicker-toggle-default-icon {
+  color: var(--text-color);
 }
 
 input::-webkit-outer-spin-button,
@@ -58,27 +155,68 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
+@media (max-width: 600px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .dialog-card {
+    gap: 1.25rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 700px) {
+  :host {
+    align-items: flex-start;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .dialog-card {
+    width: min(100%, 560px);
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+
+  .dialog-card-button {
+    min-height: 52px;
+  }
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
 
 @keyframes popupIn {
   from {
     opacity: 0;
     transform: scale(0.85);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* Animasi untuk menutup */
 @keyframes fadeOutBackdrop {
   from {
     background: rgba(0, 0, 0, 0.3);
   }
+
   to {
     background: rgba(0, 0, 0, 0);
   }
@@ -89,6 +227,7 @@ input[type=number] {
     opacity: 1;
     transform: scale(1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.85);
@@ -99,6 +238,6 @@ input[type=number] {
   animation: fadeOutBackdrop 0.25s forwards;
 }
 
-:host.closing .dialog-form {
+:host.closing .dialog-card {
   animation: popupOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }

@@ -1,19 +1,46 @@
-<app-header [isLoggedIn]="(isLoggedIn$ | async)" (buttonClick)="onLogout()" />
+<app-header
+  [isLoggedIn]="(isLoggedIn$ | async)"
+  [isMenuButton]="isCompactHeader()"
+  [isMenuExpanded]="isActionMenuOpen()"
+  [buttonAriaLabel]="isCompactHeader() ? (isActionMenuOpen() ? 'Close dashboard actions' : 'Open dashboard actions') : 'Logout'"
+  (buttonClick)="onHeaderButtonClick()" />
+
+@if (isCompactHeader() && isActionMenuVisible()) {
+<div class="header-action-menu" [class.header-action-menu--open]="isActionMenuOpen()" role="menu" aria-label="Dashboard quick actions">
+  @if (mobileIncomes().length > 0 || mobileOutcomes().length > 0) {
+  <button type="button" class="header-action-menu-button" aria-label="Add income" matTooltip="Add Income" (click)="openIncomeFromMenu()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button type="button" class="header-action-menu-button" aria-label="Add transaction" matTooltip="Add Transaction" (click)="openTransactionFromMenu()">
+    <mat-icon>remove</mat-icon>
+  </button>
+  <button type="button" class="header-action-menu-button" aria-label="Upload evidence" matTooltip="Upload Evidence" (click)="openUploadEvidenceFromMenu()">
+    <mat-icon>cloud_upload</mat-icon>
+  </button>
+  }
+  <button type="button" class="header-action-menu-button" aria-label="Sign out" matTooltip="Sign out" (click)="onLogout()">
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
+</div>
+}
+
 <main>
   @if (isLoading()) {
   <div class="spinner-container">
     <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
   </div>
   } @else {
-  @if (isMobile()) {
+  @if (useCompactDashboardLayout()) {
   <div class="mobile-view">
+    @if (!isMobileListLoading() && (mobileIncomes().length > 0 || mobileOutcomes().length > 0)) {
+    @if (!isCompactHeader()) {
     <div class="button-container">
       <button class="mButton" matFab extended type="button" (click)="openDialog('income')">
         Add Income
         <mat-icon>add_circle_outline</mat-icon>
       </button>
       <button class="mButton" matFab extended type="button" (click)="openDialog('transaction')">
-        Add Outcome
+        Add Transaction
         <mat-icon>remove_circle_outline</mat-icon>
       </button>
     </div>
@@ -23,6 +50,7 @@
         <mat-icon>cloud_upload</mat-icon>
       </button>
     </div>
+    }
     <div class="cards-container-mobile">
       <app-card [cardTitle]="'Total Balance'" [cardBody]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'"
         [expandable]="true" [imageSrc]="balanceEvidence()?.url"></app-card>
@@ -31,39 +59,72 @@
       <app-card [cardType]="'card-outcome'" [cardTitle]="'Total Outcome'"
         [cardBody]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'" />
     </div>
-    @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
     <div class="list-container">
       <app-mobile-list [incomes]="mobileIncomes()" [outcomes]="mobileOutcomes()" [incomePage]="mobileIncomePage()"
         [outcomePage]="mobileOutcomePage()" [incomeHasMore]="mobileIncomeHasMore()"
         [outcomeHasMore]="mobileOutcomeHasMore()" [loadingIncome]="mobileLoadingIncome()"
         [loadingOutcome]="mobileLoadingOutcome()" [isLoading]="isMobileListLoading()"
-        (loadMore)="onMobileLoadMore($event)" />
+        (loadMore)="onMobileLoadMore($event)" (rowActionRequested)="openRowActionMenu($event)" />
+    </div>
+    } @else if (!isMobileListLoading()) {
+    <div class="empty-state-container">
+      <div class="button-wrapper">
+        <mat-icon (click)="openDialog('income')" matTooltip="Add Income">add_circle_outline</mat-icon>
+      </div>
     </div>
     }
   </div>
   } @else {
+  @if (!isTableLoading() && (incomeDataLength() > 0 || outcomeDataLength() > 0)) {
   <div class="dashboard-container">
     <div class="balance-container">
-      <app-balance [title]="'Total Balance'" [nominal]="balance()?.balance | currency:'Rp ':'symbol':'1.0-0'" />
+      <app-balance [title]="'Total Balance'" [nominal]="(balance()?.balance | currency:'Rp ':'symbol':'1.0-0') ?? undefined" />
       <app-balance [type]="'card-income'" [title]="'Total Income'"
-        [nominal]="totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0'" />
+        [nominal]="(totalIncome()?.totalIncome | currency:'Rp ':'symbol':'1.0-0') ?? undefined" />
       <app-balance [type]="'card-outcome'" [title]="'Total Outcome'"
-        [nominal]="totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0'" />
+        [nominal]="(totalOutcome()?.totalOutcome | currency:'Rp ':'symbol':'1.0-0') ?? undefined" />
     </div>
+    @if (!isCompactHeader()) {
     <div class="button-container">
-      <mat-icon class="clickable" (click)="openBalanceEvidenceDialog()">image</mat-icon>
-      <mat-icon (click)="openDialog('income')">add_circle_outline</mat-icon>
-      <mat-icon (click)="openDialog('transaction')">remove_circle_outline</mat-icon>
+      <mat-icon class="clickable" (click)="openBalanceEvidenceDialog()" matTooltip="Balance Evidence">image</mat-icon>
+      <mat-icon (click)="openDialog('income')" matTooltip="Add Income">add_circle_outline</mat-icon>
+      <mat-icon (click)="openDialog('transaction')" matTooltip="Add Transaction">remove_circle_outline</mat-icon>
     </div>
+    }
     <div class="table-container">
-      <app-income-table />
-      <app-outcome-table />
+      @if (incomeDataLength() > 0) {
+      <app-income-table (rowActionRequested)="openRowActionMenu($event)" />
+      }
+      @if (outcomeDataLength() > 0) {
+      <app-outcome-table (rowActionRequested)="openRowActionMenu($event)" />
+      }
+    </div>
+  </div>
+  } @else if (!isTableLoading()) {
+  <div class="dashboard-container empty-state">
+    <div class="empty-state-container">
+      <div class="button-wrapper">
+        <mat-icon (click)="openDialog('income')" matTooltip="Add Income">add_circle_outline</mat-icon>
+      </div>
     </div>
   </div>
   }
   }
+  }
 </main>
-@if (showDialog) {
-<app-input-dialog [data]="{ type: dialogType }" (closed)="onDialogClose()" (submitted)="onDialogSubmit($event)">
+@if (rowActionMenu(); as menu) {
+<div class="row-action-menu" [style.left.px]="menu.menuX" [style.top.px]="menu.menuY" role="menu" aria-label="Row actions" (contextmenu)="$event.preventDefault()">
+  <button type="button" class="row-action-menu-button" role="menuitem" (click)="editSelectedRow()">
+    <mat-icon>edit</mat-icon>
+    <span>Update</span>
+  </button>
+  <button type="button" class="row-action-menu-button row-action-menu-button--delete" role="menuitem" (click)="deleteSelectedRow()">
+    <mat-icon>delete</mat-icon>
+    <span>Delete</span>
+  </button>
+</div>
+}
+@if (showDialog()) {
+<app-input-dialog [data]="dialogState()" (closed)="onDialogClose()" (submitted)="onDialogSubmit($event)">
 </app-input-dialog>
 }

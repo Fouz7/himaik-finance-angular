@@ -1,44 +1,31 @@
-@if (isMobile() && isLandscape()) {
-  <div class="orientation-overlay" aria-live="polite" role="dialog">
-    <span>Landscape mode is not supported. <br> Kindly switch to portrait :)</span>
-  </div>
-} @else {
-  <div class="container">
-    <form class="login-card" (ngSubmit)="onLogin()">
-      <div class="login-card-header">
-        <h2 class="login-card-title">Go To Dashboard</h2>
+<div class="container">
+  <form class="login-card" (ngSubmit)="onLogin()">
+    <div class="login-card-header">
+      <h2 class="login-card-title">Go To Dashboard</h2>
+    </div>
+    <div class="login-card-body">
+      <mat-form-field appearance="outline" class="login-input-field">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" id="username" name="username" [(ngModel)]="credentials.username" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="login-input-field">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" id="password" name="password" [(ngModel)]="credentials.password" required>
+      </mat-form-field>
+    </div>
+    <div class="login-card-footer">
+      <button type="submit" id="login-button" class="login-card-button" [disabled]="isLoading">
+        @if (isLoading) {
+        <mat-progress-spinner [diameter]="24" mode="indeterminate"></mat-progress-spinner>
+        } @else {
+        <span>Login</span>
+        }
+      </button>
+      <div class="login-card-divider"></div>
+      <p class="login-card-text">Not an admin? <a (click)="goBack()" style="cursor: pointer;">GO BACK PLEASE</a></p>
+      <div class="login-logo-container">
+        <img src="/HimaikFinanceLogoR.png" alt="HIMAIK Finance Logo" class="login-logo">
       </div>
-      <div class="login-card-body">
-        <input
-          type="text"
-          id="username"
-          name="username"
-          class="login-card-input"
-          placeholder="Username"
-          [(ngModel)]="credentials.username"
-          required
-        >
-        <input
-          type="password"
-          id="password"
-          name="password"
-          class="login-card-input"
-          placeholder="Password"
-          [(ngModel)]="credentials.password"
-          required
-        >
-      </div>
-      <div class="login-card-footer">
-        <button type="submit" id="login-button" class="login-card-button" [disabled]="isLoading">
-          @if (isLoading) {
-            <mat-progress-spinner [diameter]="24" mode="indeterminate"></mat-progress-spinner>
-          } @else {
-            <span>Login</span>
-          }
-        </button>
-        <div class="login-card-divider"></div>
-        <p class="login-card-text">Not an admin? <a (click)="goBack()" style="cursor: pointer;">GO BACK PLEASE</a></p>
-      </div>
-    </form>
-  </div>
-}
+    </div>
+  </form>
+</div>

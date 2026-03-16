@@ -1,33 +1,41 @@
-<h2 mat-dialog-title>Upload Evidence</h2>
-@if (!previewUrl) {
-  <div mat-dialog-content class="content">
-    <ngx-file-drop
-      dropZoneLabel="Drop image here or click to browse"
-      accept="image/*"
-      [multiple]="false"
-      (onFileDrop)="dropped($event)"
-    >
-      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-        <div
-          class="dropzone-content"
-          role="button"
-          tabindex="0"
-          (click)="openFileSelector()"
-          (keydown.enter)="openFileSelector()"
-          (keydown.space)="openFileSelector()"
-        >
-          <p>Drop image here or click to browse</p>
-        </div>
-      </ng-template>
-    </ngx-file-drop>
+<section class="dialog-card" aria-labelledby="upload-evidence-dialog-title">
+  <div class="dialog-card-header">
+    <h2 id="upload-evidence-dialog-title" class="dialog-card-title">Upload Evidence</h2>
+    <p class="dialog-card-subtitle">Choose an image file to update the latest balance evidence.</p>
   </div>
-} @else {
-  <img [src]="previewUrl" alt="preview" class="preview"/>
-}
-<div mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="uploading">Cancel</button>
-  <button mat-button type="button" color="warn" (click)="remove()" [disabled]="!file || uploading">Remove</button>
-  <button mat-button color="primary" type="button" (click)="upload()" [disabled]="!file || uploading">
-    {{ uploading ? 'Uploading...' : 'Upload' }}
-  </button>
-</div>
+
+  <div class="dialog-card-body">
+    @if (!previewUrl) {
+      <div class="dropzone-area">
+        <ngx-file-drop dropZoneLabel="Drop image here or click to browse" accept="image/*" [multiple]="false"
+          (onFileDrop)="dropped($event)">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            <div class="dropzone-content" role="button" tabindex="0" (click)="openFileSelector()"
+              (keydown.enter)="openFileSelector()" (keydown.space)="openFileSelector(); $event.preventDefault()">
+              <p class="dropzone-main-text">Tap to choose image</p>
+              <p class="dropzone-sub-text">PNG or JPG, one file only</p>
+            </div>
+          </ng-template>
+        </ngx-file-drop>
+      </div>
+    } @else {
+      <div class="preview-container">
+        <img [src]="previewUrl" alt="Selected evidence preview" class="preview" />
+        @if (!uploading) {
+          <button class="remove-icon-btn" type="button" (click)="remove()" aria-label="Remove image">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="dialog-card-footer">
+    <button class="dialog-card-button dialog-card-button-primary" type="button" (click)="upload()" [disabled]="!file || uploading">
+      {{ uploading ? 'Uploading...' : 'Upload Evidence' }}
+    </button>
+    <button class="dialog-card-button dialog-card-button-secondary" type="button" (click)="cancel()" [disabled]="uploading">
+      Cancel
+    </button>
+  </div>
+</section>

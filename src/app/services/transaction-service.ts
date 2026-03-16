@@ -10,7 +10,17 @@ export interface Outcome {
   balance: string;
   notes: string;
   createdBy: string;
-  createdAt: Date;
+  createdAt: string | Date;
+}
+
+export interface TransactionPayload {
+  nominal: number;
+  notes: string;
+}
+
+export interface UpdateTransactionPayload {
+  nominal?: number;
+  notes?: string;
 }
 
 export interface Pagination {
@@ -42,7 +52,15 @@ export class TransactionService {
     });
   }
 
-  addTransaction(data: { nominal: number; notes: string }): Observable<any> {
+  addTransaction(data: TransactionPayload): Observable<unknown> {
     return this.http.post(`${this.apiUrl}/transactions`, data);
+  }
+
+  updateTransaction(id: number, data: UpdateTransactionPayload): Observable<unknown> {
+    return this.http.put(`${this.apiUrl}/transactions/${id}`, data);
+  }
+
+  deleteTransaction(id: number): Observable<unknown> {
+    return this.http.delete(`${this.apiUrl}/transactions/${id}`);
   }
 }

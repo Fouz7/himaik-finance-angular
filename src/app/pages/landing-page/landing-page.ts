@@ -45,7 +45,6 @@ export class LandingPage implements OnInit, OnDestroy {
     this._isLandscape = e.matches;
   };
 
-
   isLoggedIn$: Observable<boolean> = this.authService.isLoggedIn$;
   balance: Signal<any | undefined> = toSignal(this.balanceService.getBalance());
   totalIncome: Signal<any | undefined> = toSignal(this.balanceService.getTotalIncome());
@@ -79,8 +78,24 @@ export class LandingPage implements OnInit, OnDestroy {
     } else {
       (this.mql as any).addListener(this.onMqlChange);
     }
-    this.loadIncomes(1, 10);
-    this.loadOutcomes(1, 10);
+
+    let desktopLoadingCount = 0;
+    const desktopTotalRequests = 2;
+
+    this.incomeService.getIncomes(1, 10).subscribe(response => {
+      this.totalIncomes.set(response.pagination.totalItems);
+      this.incomeData.set(response.data);
+      desktopLoadingCount++;
+      if (desktopLoadingCount === desktopTotalRequests) this.isTableLoading.set(false);
+    });
+
+    this.transactionService.getOutcomes(1, 10).subscribe(response => {
+      this.totalOutcomes.set(response.pagination.totalItems);
+      this.outcomeData.set(response.data);
+      desktopLoadingCount++;
+      if (desktopLoadingCount === desktopTotalRequests) this.isTableLoading.set(false);
+    });
+
     this.loadMobileIncomes();
     this.loadMobileOutcomes();
   }
@@ -115,7 +130,6 @@ export class LandingPage implements OnInit, OnDestroy {
     this.incomeService.getIncomes(page, limit).subscribe(response => {
       this.totalIncomes.set(response.pagination.totalItems);
       this.incomeData.set(response.data);
-      this.checkLoadingComplete();
     });
   }
 
@@ -123,17 +137,9 @@ export class LandingPage implements OnInit, OnDestroy {
     this.transactionService.getOutcomes(page, limit).subscribe(response => {
       this.totalOutcomes.set(response.pagination.totalItems);
       this.outcomeData.set(response.data);
-      this.checkLoadingComplete();
     });
   }
 
-  private checkLoadingComplete() {
-    if (this.incomeData().length > 0 && this.outcomeData().length > 0) {
-      this.isTableLoading.set(false);
-    }
-  }
-
-  // Mobile list methods
   loadMobileIncomes() {
     if (this.mobileLoadingIncome()) return;
     this.mobileLoadingIncome.set(true);
@@ -181,7 +187,7 @@ export class LandingPage implements OnInit, OnDestroy {
   }
 
   private checkMobileListLoadingComplete() {
-    if (this.mobileIncomes().length > 0 && this.mobileOutcomes().length > 0) {
+    if (!this.mobileLoadingIncome() && !this.mobileLoadingOutcome()) {
       this.isMobileListLoading.set(false);
     }
   }

@@ -1,34 +1,40 @@
 :host {
   display: flex;
   flex-direction: column;
-  /* Allow the page to grow larger than 100vh and scroll naturally if content exceeds viewport */
   height: auto;
   min-height: 100vh;
   overflow-y: auto;
+  --brown-wrapper-bg: var(--secondary-background-color);
+  --brown-wrapper-radius: 12px;
+  --brown-wrapper-shadow:
+    5px 6px 14px rgba(64, 45, 20, 0.14),
+    inset -2px -2px 5px rgba(88, 67, 40, 0.08),
+    inset 2px 2px 5px rgba(254, 221, 185, 0.18);
+  --brown-wrapper-border: none;
+  --landing-shell-gap: 6px;
+}
+
+:host>app-header {
+  display: block;
+  padding: var(--landing-shell-gap) var(--landing-shell-gap) 0;
 }
 
 main.desktop-view {
   display: flex;
-  /* Fill all remaining space after header */
-  flex: 1;
-  min-height: 0;
-  /* Match header's left/right margin (0.5rem) so edges align */
-  padding: 0 0.5rem;
+
+  flex: 1 0 auto;
+  padding: 0 var(--landing-shell-gap) var(--landing-shell-gap);
   gap: clamp(0.5rem, 1vw, 1rem);
-  /* Desktop keeps the hidden constraints to stay on one screen */
-  overflow: hidden;
-  max-height: calc(100vh - 60px);
-  /* rough header height */
+  align-items: stretch;
 }
 
 main.mobile-view {
   display: flex;
   flex-direction: column;
   flex: 1;
-  /* Match header's left/right margin (0.5rem) so edges align precisely */
   padding: 0 0.5rem;
-  gap: clamp(0.5rem, 2vh, 1rem);
-  /* Allow scrolling down naturally in mobile view */
+  gap: 1rem;
+
   overflow-y: auto;
   min-height: 100%;
 }
@@ -45,7 +51,6 @@ main.mobile-view {
   padding: 2rem;
 }
 
-/* Cards container: Desktop 50% width, mobile full width */
 #cards-container {
   flex: 1;
   min-width: 0;
@@ -55,17 +60,16 @@ main.mobile-view {
   padding: clamp(0.25rem, 0.5vh, 0.5rem) 0;
 }
 
-/* Explicit behaviors for mobile-view cards */
 main.mobile-view #cards-container {
-  /* Let container grow with its content when expanded vertically */
+
   flex: none;
   min-height: min-content;
-  /* Separate cards reasonably using gap */
-  gap: clamp(0.5rem, 1vh, 1rem);
-  padding-bottom: 0.5rem;
+
+  gap: 1rem;
+
+  padding-bottom: 0;
 }
 
-/* Secondary cards container needs gap in mobile too */
 main.mobile-view #cards-container .secondary-cards {
   display: flex;
   flex-direction: column;
@@ -73,15 +77,13 @@ main.mobile-view #cards-container .secondary-cards {
   flex: none;
 }
 
-/* On mobile, cards need a realistic minimum size */
 main.mobile-view #cards-container ::ng-deep app-card {
   display: flex;
   min-height: clamp(80px, 12vh, 120px);
   flex: none;
-  /* Do not stretch */
+
 }
 
-/* Enable smooth flex transitions for the child elements ONLY ON DESKTOP */
 main.desktop-view #cards-container>.main-card-wrapper {
   flex: 1;
   display: flex;
@@ -89,7 +91,6 @@ main.desktop-view #cards-container>.main-card-wrapper {
   transition: flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Secondary cards container holds 2 cards, so it gets flex: 2 compared to main card's flex: 1 */
 main.desktop-view #cards-container .secondary-cards {
   flex: 2;
   display: flex;
@@ -98,27 +99,23 @@ main.desktop-view #cards-container .secondary-cards {
   gap: clamp(0.25rem, 0.5vh, 0.5rem);
   opacity: 1;
   overflow: hidden;
-  /* Animate both flex basis and opacity */
   transition: flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
     gap 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* The cards inside secondary-cards split space evenly */
 main.desktop-view #cards-container .secondary-cards ::ng-deep app-card {
   flex: 1;
   display: flex;
   min-height: 0;
 }
 
-/* Smooth hide for the secondary cards when balance is expanded (ONLY ON DESKTOP) */
 main.desktop-view #cards-container.balance-expanded .secondary-cards {
   flex: 0;
   opacity: 0;
   gap: 0;
 }
 
-/* Table container: 50% width, fill full height */
 #table-container {
   flex: 1 1 0;
   min-width: 0;
@@ -127,7 +124,6 @@ main.desktop-view #cards-container.balance-expanded .secondary-cards {
   padding: clamp(0.25rem, 0.5vh, 0.5rem) 0;
 }
 
-/* Table container inner component fills its parent */
 #table-container ::ng-deep app-table-container {
   flex: 1;
   display: flex;
@@ -147,6 +143,220 @@ main.desktop-view #cards-container.balance-expanded .secondary-cards {
   }
 }
 
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .list-container {
   animation: slideInFromRight 0.5s ease-out forwards;
+  background-color: var(--brown-wrapper-bg);
+  border-radius: var(--brown-wrapper-radius);
+  overflow: hidden;
+  background-clip: padding-box;
+}
+
+.empty-state-container {
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--brown-wrapper-bg);
+  border-radius: var(--brown-wrapper-radius);
+  box-shadow: var(--brown-wrapper-shadow);
+  border: var(--brown-wrapper-border);
+  padding: 2rem;
+  margin: clamp(1rem, 2vh, 1.5rem) 0 0 0;
+  text-align: center;
+}
+
+main.desktop-view .empty-state-container {
+  grid-column: 1 / -1;
+  height: calc(100% - clamp(1rem, 2vh, 1.5rem));
+}
+
+main.mobile-view .empty-state-container {
+  margin: 1rem 0;
+}
+
+.empty-state-container .message {
+  color: var(--primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+::ng-deep app-table-container .table {
+  margin: 6px;
+  box-shadow: var(--brown-wrapper-shadow) !important;
+  border: var(--brown-wrapper-border) !important;
+  border-radius: var(--brown-wrapper-radius) !important;
+  background-clip: padding-box;
+}
+
+main.mobile-view .list-container {
+  margin: 0 0 0.5rem 0;
+
+  box-shadow: var(--brown-wrapper-shadow) !important;
+  border: var(--brown-wrapper-border) !important;
+  border-radius: var(--brown-wrapper-radius) !important;
+  background-clip: padding-box;
+}
+
+::ng-deep app-table-container .table-content-wrapper {
+  box-shadow:
+    2px 3px 6px rgba(0, 0, 0, 0.08),
+    inset -1px -1px 4px rgba(0, 0, 0, 0.04),
+    inset 1px 1px 4px rgba(255, 255, 255, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 8px !important;
+  margin: 0 4px;
+
+}
+
+::ng-deep app-table-container .custom-paginator mat-icon,
+::ng-deep app-table-container .custom-paginator .page-info {
+  box-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.1),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+::ng-deep app-table-container .custom-paginator mat-icon {
+  background-color: var(--primary) !important;
+  transition: all 0.2s ease;
+
+  &:hover:not(.disabled) {
+    filter: brightness(0.9);
+  }
+
+  &.disabled {
+    opacity: 0.4 !important;
+    background-color: var(--primary) !important;
+  }
+}
+
+::ng-deep app-header h1,
+::ng-deep app-header mat-icon,
+::ng-deep app-card .card-title,
+::ng-deep app-card .card-body,
+::ng-deep app-table-container .table-wrapper th,
+::ng-deep app-table-container .table-wrapper td,
+::ng-deep app-table-container .custom-paginator .page-info,
+::ng-deep app-table-container .table .mdc-tab__text-label,
+::ng-deep app-mobile-list .mdc-tab__text-label,
+::ng-deep app-mobile-list .list-item {
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+::ng-deep app-table-container .custom-paginator mat-icon {
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.15),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.2);
+}
+
+::ng-deep app-card .card-extra img {
+  box-shadow:
+    2px 2px 5px rgba(0, 0, 0, 0.08),
+    -1px -1px 3px rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+}
+
+::ng-deep app-table-container .table .mdc-tab-indicator__content--underline,
+::ng-deep app-mobile-list .mdc-tab-indicator__content--underline {
+  border: none !important;
+  height: 4px !important;
+  background-color: var(--background-color) !important;
+  border-radius: 4px !important;
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.6) !important;
+
+  max-width: 64px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+::ng-deep app-header .header {
+  margin: var(--landing-shell-gap) !important;
+}
+
+@media (max-width: 960px) {
+  ::ng-deep app-card .card {
+    min-height: 120px !important;
+    border-radius: 8px !important;
+  }
+
+  main.mobile-view .list-container,
+  ::ng-deep app-header .header {
+    border-radius: 8px !important;
+  }
+
+  :host > app-header {
+    padding: 0;
+  }
+
+  ::ng-deep app-header .header {
+    margin: 0.5rem 0.5rem 1rem 0.5rem !important;
+  }
+}
+
+@media (min-width: 961px) {
+  main.desktop-view {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+  main.desktop-view:has(.empty-state-container) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main.desktop-view #cards-container,
+  main.desktop-view #table-container {
+    min-height: 300px;
+    padding: var(--landing-shell-gap) 0 0;
+  }
+
+  :host ::ng-deep .header,
+  main.desktop-view ::ng-deep .card,
+  main.desktop-view ::ng-deep .table {
+    margin: 0 !important;
+  }
+
+  main.desktop-view #cards-container > .main-card-wrapper,
+  main.desktop-view #cards-container .secondary-cards,
+  main.desktop-view #table-container ::ng-deep .table {
+    min-height: 0;
+    height: 100%;
+  }
+
+  main.desktop_view #table-container ::ng-deep .mdc-tab-indicator__content--underline {
+    max-width: 160px !important;
+  }
+
+  ::ng-deep app-header .header,
+  ::ng-deep app-card .card {
+    box-shadow:
+      4px 6px 16px rgba(0, 0, 0, 0.08),
+      inset -3px -3px 8px rgba(0, 0, 0, 0.04),
+      inset 3px 3px 8px rgba(255, 255, 255, 0.6) !important;
+  }
 }

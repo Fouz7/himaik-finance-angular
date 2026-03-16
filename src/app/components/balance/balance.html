@@ -1,4 +1,9 @@
 <div class="nCard" [ngClass]="type()">
-  <p class="nominal">{{nominal()}}</p>
-  <p class="pText">{{title()}}</p>
+  <div class="nominal">
+    @if (currencyPrefix()) {
+      <span class="currency-prefix">{{ currencyPrefix() }}</span>
+    }
+    <span class="numeric-value">{{ numericValue() }}</span>
+  </div>
+  <p class="pText">{{ title() }}</p>
 </div>

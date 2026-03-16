@@ -14,8 +14,19 @@
         <th mat-header-cell *matHeaderCellDef> Notes</th>
         <td mat-cell *matCellDef="let element">
           @if (element.notes?.startsWith('Income:')) {
-          <span style="color: var(--income-color); font-weight: 900; font-size: 1.2em;">+</span> {{
-          element.notes.substring(7).trim() }}
+          <span class="income-derived-note">
+            <span class="income-derived-icon">+</span>
+            <span>{{ element.notes.substring(7).trim() }}</span>
+            @if (isReadonlyIncomeRow(element)) {
+            <span
+              class="readonly-income-badge"
+              matTooltip="{{ readonlyIncomeTooltip }}"
+              matTooltipPosition="above"
+              aria-label="Auto-generated transaction info">
+              Auto
+            </span>
+            }
+          </span>
           } @else {
           {{ element.notes }}
           }
@@ -37,8 +48,15 @@
         <th mat-header-cell *matHeaderCellDef> Created At</th>
         <td mat-cell *matCellDef="let element"> {{ element.createdAt | date:'dd/MM/yyyy' }}</td>
       </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns;"
+        class="interactive-row"
+        [class.interactive-row--disabled]="isReadonlyIncomeRow(row)"
+        [attr.tabindex]="isReadonlyIncomeRow(row) ? -1 : 0"
+        (contextmenu)="onRowContextMenu($event, row)"
+        (keydown)="onRowKeydown($event, row)"></tr>
     </table>
   </div>
 

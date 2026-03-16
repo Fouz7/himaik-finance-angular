@@ -1,7 +1,23 @@
 <div class="header">
   <h1>HIMAIK Finance</h1>
-  <button mat-icon-button aria-label="Tombol ikon profil pengguna" (click)="onButtonClick()">
-    @if (isLoggedIn) {
+  <button
+    mat-icon-button
+    type="button"
+    class="header-action-button"
+    [disableRipple]="isMenuButton"
+    [class.header-action-button--menu]="isMenuButton"
+    [class.header-action-button--menu-open]="isMenuButton && isMenuExpanded"
+    [attr.aria-label]="buttonAriaLabel || (isLoggedIn ? 'Logout' : 'Login')"
+    [attr.aria-expanded]="isMenuButton ? isMenuExpanded : null"
+    [attr.aria-haspopup]="isMenuButton ? 'menu' : null"
+    (click)="onButtonClick()">
+    @if (isMenuButton) {
+      <span class="menu-glyph" aria-hidden="true">
+        <span class="menu-glyph__bar"></span>
+        <span class="menu-glyph__bar"></span>
+        <span class="menu-glyph__bar"></span>
+      </span>
+    } @else if (isLoggedIn) {
       <mat-icon>exit_to_app</mat-icon>
     } @else {
       <mat-icon>person_pin</mat-icon>

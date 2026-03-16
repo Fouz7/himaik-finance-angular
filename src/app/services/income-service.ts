@@ -11,6 +11,18 @@ export interface Income {
   createdBy: string;
 }
 
+export interface IncomePayload {
+  name: string;
+  nominal: number;
+  transfer_date: string;
+}
+
+export interface UpdateIncomePayload {
+  name?: string;
+  nominal?: number;
+  transfer_date?: string;
+}
+
 export interface Pagination {
   page: number;
   limit: number;
@@ -39,8 +51,16 @@ export class IncomeService {
     });
   }
 
-  addIncome(data: { name: string; nominal: number; transfer_date: string }): Observable<any> {
+  addIncome(data: IncomePayload): Observable<unknown> {
     return this.http.post(`${this.apiUrl}/incomes`, data);
+  }
+
+  updateIncome(id: number, data: UpdateIncomePayload): Observable<unknown> {
+    return this.http.put(`${this.apiUrl}/incomes/${id}`, data);
+  }
+
+  deleteIncome(id: number): Observable<unknown> {
+    return this.http.delete(`${this.apiUrl}/incomes/${id}`);
   }
 
 }

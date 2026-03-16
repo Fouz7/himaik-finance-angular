@@ -1,6 +1,7 @@
 <app-header (buttonClick)="onLogin()" [isLoggedIn]="(isLoggedIn$ | async)" />
 @if (isMobile()) {
 <main class="mobile-view">
+  @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
   <div id="cards-container">
     @if (balance(); as bal) {
     <app-card [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'" [cardTitle]="'Total Balance'"
@@ -17,7 +18,6 @@
       [cardType]="'card-outcome'"></app-card>
     }
   </div>
-  @if (!isMobileListLoading() && mobileIncomes().length > 0 && mobileOutcomes().length > 0) {
   <div class="list-container">
     <app-mobile-list [incomes]="mobileIncomes()" [outcomes]="mobileOutcomes()" [incomePage]="mobileIncomePage()"
       [outcomePage]="mobileOutcomePage()" [incomeHasMore]="mobileIncomeHasMore()"
@@ -25,10 +25,15 @@
       [loadingOutcome]="mobileLoadingOutcome()" [isLoading]="isMobileListLoading()"
       (loadMore)="onMobileLoadMore($event)" />
   </div>
+  } @else if (!isMobileListLoading()) {
+  <div class="empty-state-container">
+    <span class="message">Come on guys! <br> Make HIMAIK great</span>
+  </div>
   }
 </main>
 } @else {
 <main class="desktop-view">
+  @if (!isTableLoading() && incomeData().length > 0 && outcomeData().length > 0) {
   <div id="cards-container" [class.balance-expanded]="balanceExpanded()">
     @if (balance(); as bal) {
     <app-card class="main-card-wrapper" [cardBody]="bal.balance | currency:'Rp ':'symbol':'1.0-0'"
@@ -49,11 +54,14 @@
     </div>
   </div>
 
-  @if (!isTableLoading() && incomeData().length > 0 && outcomeData().length > 0) {
   <div id="table-container">
     <app-table-container (incomePageChange)="onIncomePageChange($event)"
       (outcomePageChange)="onOutcomePageChange($event)" [incomeData]="incomeData()" [outcomeData]="outcomeData()"
       [totalIncomes]="totalIncomes()" [totalOutcomes]="totalOutcomes()" [isLoading]="isTableLoading()" />
+  </div>
+  } @else if (!isTableLoading()) {
+  <div class="empty-state-container">
+    <span class="message">Come on guys! <br> Make HIMAIK great</span>
   </div>
   }
 </main>

@@ -38,7 +38,6 @@
   overflow: hidden;
 }
 
-/* Style the tab labels area so it fits nicely on the brown background */
 ::ng-deep .table .mat-mdc-tab-header,
 ::ng-deep .table .mat-mdc-tab-label-container,
 ::ng-deep .table .mdc-tab-bar,
@@ -48,24 +47,19 @@
   box-shadow: none !important;
 }
 
-/* Ensure the active slider (ink bar) is visible and using the correct color */
 ::ng-deep .table .mdc-tab-indicator__content--underline {
   border-color: var(--background-color) !important;
-  /* Cream color */
   border-top-width: 2px !important;
 }
 
-/* Remove the default background divider if it still persists */
 ::ng-deep .table .mat-mdc-tab-divider {
   display: none !important;
 }
 
-/* Make sure active tabs have no strange backgrounds */
 ::ng-deep .table .mat-mdc-tab-labels {
   background-color: transparent !important;
 }
 
-/* Remove ripple effects (klik) and hover shade from material tabs */
 ::ng-deep .table .mat-mdc-tab-ripple,
 ::ng-deep .table .mat-ripple,
 ::ng-deep .table .mdc-tab__ripple {
@@ -73,7 +67,6 @@
   opacity: 0 !important;
 }
 
-/* Ensure no background color changes on hover */
 ::ng-deep .table .mat-mdc-tab:hover .mat-mdc-tab-ripple {
   display: none !important;
   opacity: 0 !important;
@@ -84,7 +77,6 @@
   font-weight: bold;
 }
 
-/* Make text cream only when the tab is active */
 ::ng-deep .table .mdc-tab--active .mdc-tab__text-label {
   color: var(--background-color) !important;
 }
@@ -101,7 +93,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Space them out: left, center, right */
   padding: 0.5rem 1rem;
   background-color: var(--secondary-background-color);
 
@@ -136,17 +127,15 @@
     background-color: var(--background-color);
     padding: 0.3rem 0.6rem;
     border-radius: 6px;
-    /* slightly rounded box instead of a pill */
+
   }
 }
 
-/* --- Shared Table CSS From Dashboard --- */
 
 ::ng-deep .table-content-wrapper {
   flex: 1;
   background-color: var(--background-color);
   border-radius: 8px;
-  /* Was 0 0 8px 8px, but now there's no top header paginator sticking to it */
   overflow: auto;
 }
 
@@ -194,7 +183,6 @@
   padding: clamp(0.25rem, 0.8vh, 1.25rem) clamp(0.25rem, 0.5vw, 1.5rem) !important;
 }
 
-/* Center-align specific columns */
 ::ng-deep .mat-column-nominal,
 ::ng-deep .mat-column-transfer_date,
 ::ng-deep .mat-column-debit,
@@ -204,7 +192,6 @@
   text-align: center !important;
 }
 
-/* Assigned widths */
 ::ng-deep .mat-column-name {
   width: 25%;
 }
@@ -237,7 +224,6 @@
   width: 20%;
 }
 
-/* Allow wrapping for long titles */
 ::ng-deep .mat-column-notes,
 ::ng-deep .mat-column-name {
   white-space: normal !important;

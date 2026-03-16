@@ -1,3 +1,124 @@
-:host ::ng-deep .mat-dialog-container {
-  background-color: var(--background-color) !important;
+:host {
+  display: block;
+  color: var(--text-color);
+}
+
+:host ::ng-deep .mat-mdc-dialog-surface,
+:host ::ng-deep .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 20px;
+  overflow: visible;
+}
+
+.dialog-card {
+  background-color: var(--background-color);
+  border-radius: 16px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: min(100%, 420px);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  box-sizing: border-box;
+  box-shadow:
+    10px 10px 15px -5px rgba(0, 0, 0, 0.3),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.1),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dialog-card-header,
+.dialog-card-body,
+.dialog-card-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-card-header {
+  gap: 0.5rem;
+}
+
+.dialog-card-body,
+.dialog-card-footer {
+  gap: 1rem;
+}
+
+.dialog-card-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.3rem, 4vw, 1.85rem);
+  font-weight: 700;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-subtitle,
+.dialog-card-message {
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.06),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.25);
+}
+
+.dialog-card-subtitle {
+  color: color-mix(in srgb, var(--text-color) 80%, white 20%);
+}
+
+.dialog-card-message {
+  font-size: 1rem;
+}
+
+.dialog-card-button {
+  width: 100%;
+  min-height: 56px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.08),
+    -0.5px -0.5px 1px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-button:hover {
+  filter: brightness(0.96);
+}
+
+.dialog-card-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.1),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.1),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.dialog-card-button-primary {
+  background-color: var(--secondary-background-color);
+  color: var(--background-color);
+  box-shadow:
+    5px 6px 14px rgba(64, 45, 20, 0.14),
+    inset -2px -2px 5px rgba(88, 67, 40, 0.08),
+    inset 2px 2px 5px rgba(254, 221, 185, 0.18);
+}
+
+.dialog-card-button-secondary {
+  background-color: rgba(255, 255, 255, 0.32);
+  color: var(--text-color);
+  box-shadow:
+    5px 6px 14px rgba(0, 0, 0, 0.12),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.08),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.24);
+}
+
+@media (max-width: 600px) {
+  .dialog-card {
+    width: min(100%, 92vw);
+    gap: 1.25rem;
+  }
 }

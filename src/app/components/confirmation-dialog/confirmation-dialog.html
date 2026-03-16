@@ -1,6 +1,18 @@
+<section class="dialog-card" aria-labelledby="confirmation-dialog-title" aria-describedby="confirmation-dialog-message">
+  <div class="dialog-card-header">
+    <h2 id="confirmation-dialog-title" class="dialog-card-title">{{ data.title }}</h2>
+  </div>
 
-<mat-dialog-content>{{ data.message }}</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="false">No</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button>
-</mat-dialog-actions>
+  <div class="dialog-card-body">
+    <p id="confirmation-dialog-message" class="dialog-card-message">{{ data.message }}</p>
+  </div>
+
+  <div class="dialog-card-footer">
+    <button type="button" class="dialog-card-button dialog-card-button-primary" [mat-dialog-close]="true">
+      Confirm
+    </button>
+    <button type="button" class="dialog-card-button dialog-card-button-secondary" [mat-dialog-close]="false">
+      Cancel
+    </button>
+  </div>
+</section>

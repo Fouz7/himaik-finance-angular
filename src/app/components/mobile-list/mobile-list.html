@@ -1,33 +1,72 @@
-@if (!isLoading() && incomes().length > 0 && outcomes().length > 0) {
-<div class="mobile-list-container">
-  <mat-tab-group animationDuration="1200ms">
+@if (!isLoading() && (incomes().length > 0 || outcomes().length > 0)) {
+<div class="mobile-list-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+  <mat-tab-group animationDuration="1200ms" disableRipple [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Income">
       <div class="list-viewport" #viewport data-type="income" (scroll)="onScroll($event, 'income')">
         @for (item of incomes(); track item) {
-        <div class="list-item">
+        <div
+          class="list-item"
+          tabindex="0"
+          (contextmenu)="onItemContextMenu($event, 'income', item)"
+          (touchstart)="onItemTouchStart($event, 'income', item)"
+          (touchmove)="onItemTouchMove($event)"
+          (touchend)="onItemTouchEnd()"
+          (touchcancel)="onItemTouchEnd()">
           <div class="item-details">
             <span class="item-name">{{ item.name }}</span>
             <span class="item-date">{{ item.transfer_date | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="item-amount income">
-            {{ item.nominal | currency:'Rp ':'symbol':'1.0-0' }}
+            {{ item.nominal | number:'1.0-0' }}
           </div>
         </div>
+        }
+        @if (incomes().length === 0) {
+        <div class="list-empty-state">No income data yet.</div>
         }
       </div>
     </mat-tab>
     <mat-tab label="Transaction">
       <div class="list-viewport" #viewport data-type="outcome" (scroll)="onScroll($event, 'outcome')">
         @for (item of outcomes(); track item) {
-        <div class="list-item">
+        <div
+          class="list-item"
+          [class.list-item--disabled-action]="isReadonlyIncomeTransaction(item)"
+          [attr.tabindex]="isReadonlyIncomeTransaction(item) ? -1 : 0"
+          (contextmenu)="onItemContextMenu($event, 'transaction', item)"
+          (touchstart)="onItemTouchStart($event, 'transaction', item)"
+          (touchmove)="onItemTouchMove($event)"
+          (touchend)="onItemTouchEnd()"
+          (touchcancel)="onItemTouchEnd()">
           <div class="item-details">
-            <span class="item-name">{{ item.notes }}</span>
+            <span class="item-name">
+              @if (item.notes?.startsWith('Income:')) {
+              <span class="income-derived-name">
+                <span class="income-icon">+</span>
+                <span>{{ item.notes!.substring(7).trim() }}</span>
+                @if (isReadonlyIncomeTransaction(item)) {
+                <span
+                  class="readonly-income-badge"
+                  matTooltip="{{ readonlyIncomeTooltip }}"
+                  matTooltipPosition="above"
+                  aria-label="Auto-generated transaction info">
+                  Auto
+                </span>
+                }
+              </span>
+              } @else {
+              {{ item.notes }}
+              }
+            </span>
             <span class="item-date">{{ item.createdAt | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="item-amount" [ngClass]="getTransactionClass(item)">
-            {{ getTransactionAmount(item) | currency:'Rp ':'symbol':'1.0-0' }}
+            {{ getTransactionAmount(item) | number:'1.0-0' }}
           </div>
         </div>
+        }
+        @if (outcomes().length === 0) {
+        <div class="list-empty-state">No transaction data yet.</div>
         }
       </div>
     </mat-tab>

@@ -1,18 +1,27 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="dialog-form">
-  <div class="dialog-content">
+<form [formGroup]="form" (ngSubmit)="submit()" class="dialog-card">
+  <div class="dialog-card-header">
+    <h2 class="dialog-card-title">
+      {{ data?.mode === 'edit'
+        ? (data?.type === 'income' ? 'Edit Income' : 'Edit Transaction')
+        : (data?.type === 'income' ? 'Add Income' : 'Add Transaction') }}
+    </h2>
+  </div>
+
+  <div class="dialog-card-body">
     @if (data?.type === 'income') {
-      <h2>Add Income</h2>
-      <mat-form-field class="example-full-width">
+      <mat-form-field appearance="outline" class="dialog-input-field">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Name" formControlName="name">
+        <input matInput placeholder="Name" [formControl]="form.controls.name">
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+
+      <mat-form-field appearance="outline" class="dialog-input-field">
         <mat-label>Nominal</mat-label>
-        <input matInput placeholder="Nominal" formControlName="nominal" type="number">
+        <input matInput placeholder="Nominal" [formControl]="form.controls.nominal" type="number">
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+
+      <mat-form-field appearance="outline" class="dialog-input-field">
         <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="transfer_date">
+        <input matInput [matDatepicker]="picker" [formControl]="form.controls.transfer_date">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker">
           <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
@@ -20,25 +29,26 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     } @else {
-      <h2>Add Transaction</h2>
-      <mat-form-field class="example-full-width">
+      <mat-form-field appearance="outline" class="dialog-input-field">
         <mat-label>Nominal</mat-label>
-        <input matInput placeholder="Nominal" formControlName="nominal" type="number">
+        <input matInput placeholder="Nominal" [formControl]="form.controls.nominal" type="number">
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+
+      <mat-form-field appearance="outline" class="dialog-input-field">
         <mat-label>Note</mat-label>
-        <input matInput placeholder="Name" formControlName="notes">
+        <input matInput placeholder="Write a note" [formControl]="form.controls.notes">
       </mat-form-field>
     }
   </div>
-  <div class="dialog-actions">
-    <button matFab extended type="button" (click)="close()">
-      Cancel
-      <mat-icon>cancel</mat-icon>
+
+  <div class="dialog-card-footer">
+    <button type="submit" class="dialog-card-button dialog-card-button-primary" [disabled]="form.invalid">
+      {{ data?.mode === 'edit'
+        ? (data?.type === 'income' ? 'Update Income' : 'Update Transaction')
+        : (data?.type === 'income' ? 'Save Income' : 'Save Transaction') }}
     </button>
-    <button matFab extended type="submit" [disabled]="form.invalid">
-      Submit
-      <mat-icon>send</mat-icon>
+    <button type="button" class="dialog-card-button dialog-card-button-secondary" (click)="close()">
+      Cancel
     </button>
   </div>
 </form>
